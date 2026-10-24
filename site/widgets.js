@@ -40,16 +40,14 @@
     var theme = darkQuery.matches ? "dark" : "light";
     var c = COLORS[theme];
 
-    // One small ticker per price, so they can sit side by side or stack on phones.
-    var TITLES = { brent: "Brent crude", wti: "WTI crude" };
+    // One price box per benchmark (proven widget); side by side on computers, stacked on phones.
     document.querySelectorAll("[data-tv-ticker]").forEach(function (slot) {
-      var key = slot.getAttribute("data-tv-ticker");
-      mount(slot, "embed-widget-tickers.js", {
-        symbols: [{ proName: SYMBOLS[key], title: TITLES[key] }],
+      mount(slot, "embed-widget-symbol-info.js", {
+        symbol: SYMBOLS[slot.getAttribute("data-tv-ticker")],
+        width: "100%",
+        locale: "en",
         colorTheme: "dark",
-        isTransparent: true,
-        showSymbolLogo: true,
-        locale: "en"
+        isTransparent: true
       });
     });
 
