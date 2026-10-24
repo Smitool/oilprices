@@ -40,15 +40,20 @@
     var theme = darkQuery.matches ? "dark" : "light";
     var c = COLORS[theme];
 
-    document.querySelectorAll("[data-tv-quote]").forEach(function (slot) {
-      mount(slot, "embed-widget-symbol-info.js", {
-        symbol: SYMBOLS[slot.getAttribute("data-tv-quote")],
-        width: "100%",
-        locale: "en",
-        colorTheme: slot.getAttribute("data-tv-theme") || theme,
-        isTransparent: true
+    // One lightweight widget for both prices (one download instead of two).
+    var tickers = document.querySelector("[data-tv-tickers]");
+    if (tickers) {
+      mount(tickers, "embed-widget-tickers.js", {
+        symbols: [
+          { proName: SYMBOLS.brent, title: "Brent crude" },
+          { proName: SYMBOLS.wti, title: "WTI crude" }
+        ],
+        colorTheme: "dark",
+        isTransparent: true,
+        showSymbolLogo: true,
+        locale: "en"
       });
-    });
+    }
 
     var chart = document.querySelector("[data-tv-chart]");
     if (chart) whenIdle(function () { mountChart(chart, theme, c); });
