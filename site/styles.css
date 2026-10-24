@@ -14,7 +14,7 @@
   --ink-3: #6b7880;
   --rule: #d3dadc;
   --accent: #0b5563;
-  --band: #0c3b45;
+  --band: #0a1d24;
 }
 
 @media (prefers-color-scheme: dark) {
@@ -26,7 +26,7 @@
     --ink-3: #8795a0;
     --rule: #26363f;
     --accent: #6cc3d1;
-    --band: #0b2e37;
+    --band: #071419;
   }
 }
 
@@ -87,6 +87,24 @@ a { color: var(--accent); text-underline-offset: 0.18em; }
 .band .tv-fallback { color: rgba(255, 255, 255, 0.75); }
 .tv-credit { margin: 0.4rem 0 0; font-size: 0.75rem; }
 .tv-credit a { color: var(--ink-3); }
+
+/* Layout: chart and text left, ad rail right on wide screens */
+.layout { display: block; }
+.content { min-width: 0; }
+
+.ad-slot[hidden] { display: none !important; }
+.ad-label { margin: 0 0 0.3rem; font-size: 0.6875rem; color: var(--ink-3); }
+.ad-slot:has(ins[data-ad-status="unfilled"]) { display: none; }
+.ad-inline { margin-top: 2rem; }
+.ad-rail { display: none; }
+
+@media (min-width: 1100px) {
+  .wrap { width: min(100% - 3rem, 78rem); }
+  .layout { display: grid; grid-template-columns: minmax(0, 1fr) 300px; column-gap: 2.5rem; align-items: start; }
+  .ad-inline { display: none; }
+  .ad-rail { display: block; padding-top: 2rem; height: 100%; }
+  .ad-rail-inner { position: sticky; top: 1.5rem; width: 300px; }
+}
 
 /* Chart */
 .history { padding-top: 2rem; }

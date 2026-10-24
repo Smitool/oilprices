@@ -10,13 +10,22 @@
   <meta property="og:description" content="Live Brent and WTI crude oil prices and price history.">
   <meta property="og:url" content="https://oilprices.io/">
   <meta property="og:type" content="website">
-  <meta name="theme-color" content="#0c3b45" media="(prefers-color-scheme: light)">
-  <meta name="theme-color" content="#0b2e37" media="(prefers-color-scheme: dark)">
+  <meta name="theme-color" content="#0a1d24" media="(prefers-color-scheme: light)">
+  <meta name="theme-color" content="#071419" media="(prefers-color-scheme: dark)">
   <link rel="icon" href="favicon.svg" type="image/svg+xml">
   <link rel="preload" href="fonts/archivo.woff2" as="font" type="font/woff2" crossorigin>
   <link rel="preconnect" href="https://s3.tradingview.com">
   <link rel="preconnect" href="https://s.tradingview.com">
   <link rel="stylesheet" href="styles.css">
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "WebSite",
+    "name": "oilprices.io",
+    "url": "https://oilprices.io/",
+    "description": "Live Brent and WTI crude oil prices in US dollars per barrel, with price history charts."
+  }
+  </script>
   <script src="privacy-signals.js"></script>
 
   <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9932307887793247" crossorigin="anonymous"></script>
@@ -42,18 +51,42 @@
     </section>
   </div>
 
-  <main class="wrap">
-    <section class="history" aria-label="Price history chart" data-tv-chart>
-      <div class="tv-slot tv-slot-chart" data-tv-target></div>
-      <p class="tv-fallback" data-tv-fallback hidden>Chart didn't load. If you use an ad blocker, allow tradingview.com and refresh.</p>
-      <p class="tv-credit"><a href="https://www.tradingview.com/" rel="noopener nofollow" target="_blank">Track all markets on TradingView</a></p>
-    </section>
+  <main class="wrap layout">
+    <div class="content">
+      <section class="history" aria-label="Price history chart" data-tv-chart>
+        <div class="tv-slot tv-slot-chart" data-tv-target></div>
+        <p class="tv-fallback" data-tv-fallback hidden>Chart didn't load. If you use an ad blocker, allow tradingview.com and refresh.</p>
+        <p class="tv-credit"><a href="https://www.tradingview.com/" rel="noopener nofollow" target="_blank">Track all markets on TradingView</a></p>
+      </section>
 
-    <section class="about" aria-label="About these prices">
-      <p><strong>About these prices.</strong> OANDA's Brent and WTI quotes via TradingView, in US dollars per barrel. They track the nearest-month futures closely but are not official ICE or NYMEX prices or settlements. Oil trades from Sunday evening to Friday evening; outside those hours the last price is shown.</p>
-      <p><strong>Brent</strong> is North Sea crude, traded on ICE in London, and prices most internationally traded oil. <strong>WTI</strong> is US crude, traded on NYMEX in New York and delivered at Cushing, Oklahoma. Brent usually trades a few dollars above WTI.</p>
-      <p>For information only. Not investment advice.</p>
-    </section>
+      <!-- Phones and tablets: ad below the chart -->
+      <aside class="ad-slot ad-inline" aria-label="Advertisement">
+        <p class="ad-label">Advertisement</p>
+        <!-- replace AD_SLOT_INLINE with the number of your "below-chart" ad unit -->
+        <ins class="adsbygoogle" style="display:block"
+             data-ad-client="ca-pub-9932307887793247"
+             data-ad-slot="AD_SLOT_INLINE"
+             data-ad-format="auto"
+             data-full-width-responsive="true"></ins>
+      </aside>
+
+      <section class="about" aria-label="About these prices">
+        <p><strong>About these prices.</strong> OANDA's Brent and WTI quotes via TradingView, in US dollars per barrel. They track the nearest-month futures closely but are not official ICE or NYMEX prices or settlements. Oil trades from Sunday evening to Friday evening; outside those hours the last price is shown.</p>
+        <p><strong>Brent</strong> is North Sea crude, traded on ICE in London, and prices most internationally traded oil. <strong>WTI</strong> is US crude, traded on NYMEX in New York and delivered at Cushing, Oklahoma. Brent usually trades a few dollars above WTI.</p>
+        <p>For information only. Not investment advice.</p>
+      </section>
+    </div>
+
+    <!-- Wide screens: sidebar ad that stays in view while scrolling -->
+    <aside class="ad-slot ad-rail" aria-label="Advertisement">
+      <div class="ad-rail-inner">
+        <p class="ad-label">Advertisement</p>
+        <!-- replace AD_SLOT_SIDEBAR with the number of your "sidebar" ad unit (fixed 300x600) -->
+        <ins class="adsbygoogle" style="display:inline-block;width:300px;height:600px"
+             data-ad-client="ca-pub-9932307887793247"
+             data-ad-slot="AD_SLOT_SIDEBAR"></ins>
+      </div>
+    </aside>
   </main>
 
   <footer class="foot wrap">
@@ -67,6 +100,15 @@
   </footer>
 
   <script src="widgets.js" defer></script>
+  <script>
+    document.querySelectorAll("ins.adsbygoogle").forEach(function (ad) {
+      var slot = ad.closest(".ad-slot");
+      var hasId = /^\d+$/.test(ad.getAttribute("data-ad-slot"));
+      var visible = getComputedStyle(slot).display !== "none";
+      if (hasId && visible) (window.adsbygoogle = window.adsbygoogle || []).push({});
+      else if (!hasId) slot.hidden = true;
+    });
+  </script>
   <script src="consent.js" defer></script>
   <script>document.getElementById("year").textContent = new Date().getFullYear();</script>
 </body>
