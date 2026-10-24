@@ -1,0 +1,196 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>US Crude Oil Imports by Country and Port: Interactive Map | oilprices.io</title>
+  <meta name="description" content="Where does the US get its oil? Interactive map of monthly US crude oil imports by country of origin, crude grade and port of entry, using official EIA data.">
+  <link rel="canonical" href="https://oilprices.io/imports.html">
+  <meta property="og:title" content="US crude oil imports by country and port">
+  <meta property="og:description" content="Interactive map of monthly US crude oil imports by country, grade and port of entry.">
+  <meta property="og:url" content="https://oilprices.io/imports.html">
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="oilprices.io">
+  <meta property="og:image" content="https://oilprices.io/og-imports.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:image:alt" content="Map of US crude oil imports by country and port">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="theme-color" content="#0a1d24" media="(prefers-color-scheme: light)">
+  <meta name="theme-color" content="#071419" media="(prefers-color-scheme: dark)">
+  <link rel="icon" href="favicon.svg" type="image/svg+xml">
+  <link rel="apple-touch-icon" href="apple-touch-icon.png">
+  <link rel="preload" href="fonts/archivo.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="preload" href="data/imports.json" as="fetch" crossorigin>
+  <link rel="preconnect" href="https://tiles.openfreemap.org" crossorigin>
+  <link rel="stylesheet" href="vendor/maplibre-gl.css">
+  <link rel="stylesheet" href="styles.css">
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "BreadcrumbList",
+        "itemListElement": [
+          { "@type": "ListItem", "position": 1, "name": "Oil prices", "item": "https://oilprices.io/" },
+          { "@type": "ListItem", "position": 2, "name": "US oil imports", "item": "https://oilprices.io/imports.html" }
+        ]
+      },
+      {
+        "@type": "Dataset",
+        "name": "US crude oil imports by country of origin and port of entry",
+        "description": "Monthly US crude oil imports by country of origin, crude grade (light sweet, light sour, medium, heavy sweet, heavy sour) and US port of entry, in barrels. Compiled from the U.S. Energy Information Administration's company-level imports data (Form EIA-814).",
+        "url": "https://oilprices.io/imports.html",
+        "isBasedOn": "https://www.eia.gov/petroleum/imports/companylevel/",
+        "creator": { "@type": "Organization", "name": "U.S. Energy Information Administration", "url": "https://www.eia.gov" },
+        "publisher": { "@type": "Organization", "name": "oilprices.io", "url": "https://oilprices.io/" },
+        "license": "https://creativecommons.org/publicdomain/mark/1.0/",
+        "isAccessibleForFree": true,
+        "spatialCoverage": "United States",
+        "temporalCoverage": "2025-01/..",
+        "dateModified": "2026-10-24",
+        "keywords": ["crude oil imports", "US oil imports by country", "oil imports by port", "EIA"],
+        "distribution": { "@type": "DataDownload", "encodingFormat": "application/json", "contentUrl": "https://oilprices.io/data/imports.json" }
+      }
+    ]
+  }
+  </script>
+  <script src="privacy-signals.js"></script>
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9932307887793247" crossorigin="anonymous"></script>
+</head>
+<body>
+  <div class="band">
+    <header class="band-top wrap">
+      <a class="wordmark" href="/">oilprices<span>.io</span></a>
+      <nav class="site-nav" aria-label="Main">
+        <a href="/">Oil prices</a>
+        <a href="imports.html" aria-current="page">US oil imports</a>
+      </nav>
+    </header>
+    <div class="imports-head wrap">
+      <h1>US crude oil imports by country and port</h1>
+      <p class="imports-sub" id="imports-sub">Monthly crude oil arriving in the United States, from each country of origin to each port of entry.</p>
+      <form class="filters" id="filters" aria-label="Filter the map">
+        <label>Month
+          <select id="f-month"></select>
+        </label>
+        <button type="button" class="play" id="f-play" aria-pressed="false">Play months</button>
+        <label>Grade
+          <select id="f-grade"><option value="">All grades</option></select>
+        </label>
+        <label>From
+          <select id="f-origin"><option value="">All countries</option></select>
+        </label>
+        <label>To
+          <select id="f-state"><option value="">All states</option></select>
+        </label>
+        <button type="reset" class="reset" id="f-reset">Reset</button>
+      </form>
+    </div>
+  </div>
+
+  <main class="wrap imports-layout">
+    <section class="map-wrap" aria-label="Map of crude oil flows into the United States">
+      <div class="map" id="map">
+        <button type="button" class="map-reset" id="z-reset">Reset view</button>
+        <p class="map-msg" id="map-msg">Loading map…</p>
+        <div class="map-tip" id="map-tip" role="status" hidden></div>
+      </div>
+      <p class="map-legend">
+        <span class="lg-item"><span class="lg-line"></span> Oil flows from each country to the US port where it arrives; thicker means more oil</span>
+        <span class="lg-item"><span class="lg-dot lg-port"></span> US port of entry</span>
+        <span class="lg-item"><span class="lg-dot lg-origin"></span> Country of origin</span>
+        <span class="lg-item">Scroll or pinch to zoom, drag to move</span>
+      </p>
+    </section>
+
+    <aside class="imports-panel" aria-label="Summary for the selected month">
+      <dl class="kpis">
+        <div><dt>Crude oil imported</dt><dd id="k-total">–</dd></div>
+        <div><dt>Per day</dt><dd id="k-day">–</dd></div>
+        <div><dt>Countries</dt><dd id="k-countries">–</dd></div>
+      </dl>
+      <h2>Top suppliers</h2>
+      <ol class="bars" id="b-origins"></ol>
+      <h2>Top ports of entry</h2>
+      <ol class="bars" id="b-ports"></ol>
+    </aside>
+
+    <details class="routes">
+      <summary>Show all routes for this selection as a table</summary>
+      <div class="table-scroll">
+        <table id="t-routes">
+          <thead><tr><th scope="col">From</th><th scope="col">To</th><th scope="col">Barrels</th><th scope="col">Barrels per day</th><th scope="col">Share</th></tr></thead>
+          <tbody></tbody>
+        </table>
+      </div>
+    </details>
+
+    <aside class="ad-slot ad-wide" aria-label="Advertisement">
+      <p class="ad-label">Advertisement</p>
+      <!-- replace AD_SLOT_IMPORTS with the number of your "below-chart" (responsive) ad unit -->
+      <ins class="adsbygoogle" style="display:block"
+           data-ad-client="ca-pub-9932307887793247"
+           data-ad-slot="AD_SLOT_IMPORTS"
+           data-ad-format="auto"
+           data-full-width-responsive="true"></ins>
+    </aside>
+
+    <article class="article imports-article">
+      <h2>Latest month at a glance</h2>
+      <div class="summary">
+<!-- SUMMARY:START -->
+<!-- SUMMARY:END -->
+      </div>
+
+      <h2>Where does the US get its oil?</h2>
+      <p>The United States is one of the world's largest oil producers, but it still imports several million barrels of crude oil every day. By far the largest supplier is Canada, which sends most of its crude by pipeline across the northern border into North Dakota, Montana, Minnesota and Michigan. Mexico, Saudi Arabia, Iraq, Brazil, Colombia, Ecuador and Guyana are other regular suppliers, with smaller volumes from Africa, Europe and the rest of Latin America. The map above shows exactly which countries sent crude in each month, how much, and where it arrived.</p>
+
+      <h2>Why does the US import oil if it produces so much?</h2>
+      <p>Most oil produced in the US, especially from shale fields like the Permian Basin, is light and low in sulphur. Many US refineries, particularly on the Gulf Coast and in the Midwest, were built to process heavier, higher-sulphur crude, which is cheaper and yields more diesel and other heavy products. Importing heavy crude from Canada, Mexico and Latin America, while exporting light US crude, lets those refineries run efficiently. Geography matters too: refineries on the West Coast and East Coast are far from the main US oil fields, so shipping crude in by tanker is often cheaper than moving it across the country.</p>
+
+      <h2>How crude oil arrives in the United States</h2>
+      <p>Canadian crude mostly enters through pipeline border crossings such as Pembina and Portal in North Dakota and Sweetgrass in Montana. Seaborne crude arrives by tanker at Gulf Coast ports like Port Arthur, Houston, Corpus Christi and Lake Charles, at California ports such as Los Angeles, Long Beach and Richmond, in Washington State, and on the East Coast around Philadelphia and New Jersey. Each line on the map runs from a country's main export hub to the US port where the crude was recorded as entering the country.</p>
+
+      <h2>Crude oil grades explained</h2>
+      <p>Crude oil is classified by how dense it is and how much sulphur it contains. Density is measured in API gravity: crude with an API gravity of 35 or more is <strong>light</strong>, 27 or less is <strong>heavy</strong>, and anything in between is <strong>medium</strong>. Crude with 0.5% sulphur or less is <strong>sweet</strong>; above that it is <strong>sour</strong>. Light sweet crude is the easiest to refine into gasoline and usually the most expensive. Heavy sour crude, such as much of Canada's oil sands output, needs more complex refineries but sells at a discount. Use the Grade filter to see where each type comes from.</p>
+
+      <h2>Questions</h2>
+      <h3>Which country does the US import the most oil from?</h3>
+      <p>Canada, by a wide margin. It has been the largest supplier of crude oil to the US for many years and usually accounts for well over half of all US crude imports. The table above shows the current ranking.</p>
+      <h3>Does the US import oil from Russia?</h3>
+      <p>No. The United States banned imports of Russian crude oil in March 2022.</p>
+      <h3>What is a port of entry?</h3>
+      <p>It is the place where imported crude is recorded as entering the United States. For tankers, that is the port where the ship unloads; for pipelines from Canada, it is the border crossing.</p>
+      <h3>How often is this data updated?</h3>
+      <p>The U.S. Energy Information Administration publishes company-level import data monthly, about two months after the end of each month. This page checks for new data every week.</p>
+
+      <h2>Data source and method</h2>
+      <p>Data: U.S. Energy Information Administration, company-level crude oil imports (Form EIA-814), via the EIA open data API. EIA reports volumes in thousands of barrels; we show them in barrels and barrels per day. Only country-of-origin to port-of-entry records are used, so nothing is counted twice. Each country is drawn at its main crude export hub (for example Hardisty for Canada and Ras Tanura for Saudi Arabia). A few ports are drawn at the centre of their state when their exact location is not known; these are marked in the tooltip. EIA data is in the public domain. The background map is provided by OpenFreeMap using OpenStreetMap data.</p>
+    </article>
+  </main>
+
+  <footer class="foot wrap">
+    <p>© <span id="year">2026</span> oilprices.io</p>
+    <p><a href="/">Oil prices</a></p>
+    <p><a href="privacy.html">Privacy policy</a></p>
+    <p><a href="terms.html">Terms of use</a></p>
+    <p><a href="#" data-consent-settings>Privacy and cookie settings</a></p>
+    <p><a href="privacy.html#us-choices">Do Not Sell or Share My Personal Information</a></p>
+    <p><a href="mailto:hello@oilprices.io">hello@oilprices.io</a></p>
+    <p class="gpc-notice" data-gpc-notice hidden>Opt-out request honored (Global Privacy Control)</p>
+  </footer>
+
+  <script src="vendor/maplibre-gl.js" defer></script>
+  <script src="imports.js" defer></script>
+  <script>
+    document.querySelectorAll("ins.adsbygoogle").forEach(function (ad) {
+      var slot = ad.closest(".ad-slot");
+      if (/^\d+$/.test(ad.getAttribute("data-ad-slot"))) (window.adsbygoogle = window.adsbygoogle || []).push({});
+      else slot.hidden = true;
+    });
+  </script>
+  <script src="consent.js" defer></script>
+  <script>document.getElementById("year").textContent = new Date().getFullYear();</script>
+</body>
+</html>

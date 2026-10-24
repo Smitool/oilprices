@@ -3,16 +3,23 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Oil Prices Today: Live Brent and WTI Crude Price | oilprices.io</title>
-  <meta name="description" content="Live Brent and WTI crude oil prices in US dollars per barrel, with daily change and price history charts.">
+  <title>Oil Price Today: Live Brent and WTI Crude Oil Price Chart | oilprices.io</title>
+  <meta name="description" content="Oil price today: live Brent and WTI crude oil prices per barrel, daily change and price charts from one day to five years, plus what moves the price of oil.">
   <link rel="canonical" href="https://oilprices.io/">
-  <meta property="og:title" content="Oil Prices Today: Live Brent and WTI">
+  <meta property="og:title" content="Oil price today: live Brent and WTI crude oil prices">
   <meta property="og:description" content="Live Brent and WTI crude oil prices and price history.">
   <meta property="og:url" content="https://oilprices.io/">
   <meta property="og:type" content="website">
+  <meta property="og:site_name" content="oilprices.io">
+  <meta property="og:image" content="https://oilprices.io/og-prices.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:image:alt" content="oilprices.io: live Brent and WTI crude oil prices">
+  <meta name="twitter:card" content="summary_large_image">
   <meta name="theme-color" content="#0a1d24" media="(prefers-color-scheme: light)">
   <meta name="theme-color" content="#071419" media="(prefers-color-scheme: dark)">
   <link rel="icon" href="favicon.svg" type="image/svg+xml">
+  <link rel="apple-touch-icon" href="apple-touch-icon.png">
   <link rel="preload" href="fonts/archivo.woff2" as="font" type="font/woff2" crossorigin>
   <link rel="preconnect" href="https://s3.tradingview.com">
   <link rel="preconnect" href="https://s.tradingview.com">
@@ -23,10 +30,34 @@
   <script type="application/ld+json">
   {
     "@context": "https://schema.org",
-    "@type": "WebSite",
-    "name": "oilprices.io",
-    "url": "https://oilprices.io/",
-    "description": "Live Brent and WTI crude oil prices in US dollars per barrel, with price history charts."
+    "@graph": [
+      {
+        "@type": "Organization",
+        "@id": "https://oilprices.io/#org",
+        "name": "oilprices.io",
+        "url": "https://oilprices.io/",
+        "logo": "https://oilprices.io/logo-512.png",
+        "email": "hello@oilprices.io"
+      },
+      {
+        "@type": "WebSite",
+        "@id": "https://oilprices.io/#website",
+        "name": "oilprices.io",
+        "url": "https://oilprices.io/",
+        "publisher": { "@id": "https://oilprices.io/#org" },
+        "inLanguage": "en"
+      },
+      {
+        "@type": "WebPage",
+        "@id": "https://oilprices.io/#page",
+        "url": "https://oilprices.io/",
+        "name": "Oil price today: live Brent and WTI crude oil prices",
+        "description": "Live Brent and WTI crude oil prices per barrel, daily change and price charts, plus what moves the price of oil.",
+        "isPartOf": { "@id": "https://oilprices.io/#website" },
+        "primaryImageOfPage": "https://oilprices.io/og-prices.png",
+        "inLanguage": "en"
+      }
+    ]
   }
   </script>
   <script src="privacy-signals.js"></script>
@@ -34,11 +65,14 @@
   <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9932307887793247" crossorigin="anonymous"></script>
 </head>
 <body>
-  <h1 class="visually-hidden">Brent and WTI crude oil prices today</h1>
 
   <div class="band">
     <header class="band-top wrap">
       <a class="wordmark" href="/">oilprices<span>.io</span></a>
+      <nav class="site-nav" aria-label="Main">
+        <a href="/" aria-current="page">Oil prices</a>
+        <a href="imports.html">US oil imports</a>
+      </nav>
     </header>
     <section class="quotes wrap" aria-label="Live prices">
       <h2 class="visually-hidden">Brent and WTI crude oil prices</h2>
@@ -72,11 +106,31 @@
              data-full-width-responsive="true"></ins>
       </aside>
 
-      <section class="about" aria-label="About these prices">
-        <p><strong>About these prices.</strong> OANDA's Brent and WTI quotes via TradingView, in US dollars per barrel. They track the nearest-month futures closely but are not official ICE or NYMEX prices or settlements. Oil trades from Sunday evening to Friday evening; outside those hours the last price is shown.</p>
-        <p><strong>Brent</strong> is North Sea crude, traded on ICE in London, and prices most internationally traded oil. <strong>WTI</strong> is US crude, traded on NYMEX in New York and delivered at Cushing, Oklahoma. Brent usually trades a few dollars above WTI.</p>
-        <p>For information only. Not investment advice.</p>
-      </section>
+      <article class="article">
+        <h1>Oil price today: live Brent and WTI crude oil prices</h1>
+        <p>The prices at the top of this page are live quotes for the two most widely followed crude oil benchmarks, <strong>Brent</strong> and <strong>WTI</strong> (West Texas Intermediate), in US dollars per barrel. They update automatically while the market is open, and the chart shows how the price of oil has moved over the last day, month, year or five years.</p>
+
+        <h2>Brent vs WTI: what is the difference?</h2>
+        <p>Brent is crude from oil fields in the North Sea. It is traded on ICE Futures Europe in London and is the reference price for most of the oil bought and sold around the world, including crude from Europe, Africa and the Middle East. WTI is light, sweet crude produced in the United States and delivered at Cushing, Oklahoma, and is traded on NYMEX in New York. When people talk about "the oil price" in the news, they usually mean one of these two. Brent normally trades a few dollars above WTI because it is easier to ship to buyers worldwide; that gap is called the Brent–WTI spread.</p>
+
+        <h2>What moves the price of oil?</h2>
+        <p>Oil prices change every minute because of supply and demand. On the supply side, the biggest factors are production decisions by OPEC+ countries such as Saudi Arabia and Russia, output from US shale fields, and disruptions caused by wars, sanctions, storms or pipeline outages. On the demand side, the price follows the health of the world economy, especially China and the United States, as well as the season: demand for gasoline peaks in summer and for heating oil in winter. Weekly inventory data matters too: the US Energy Information Administration reports changes in US crude stocks every Wednesday, and a large rise or fall can move prices within seconds. Because oil is priced in dollars, a stronger dollar tends to push the oil price down, and a weaker dollar tends to push it up.</p>
+
+        <h2>How the oil price is quoted</h2>
+        <p>Crude oil is priced in US dollars per barrel. One barrel is 42 US gallons, or about 159 litres. The prices on this page follow the nearest-month futures contract, which is what most news reports and charts use. Oil trades almost 24 hours a day from Sunday evening to Friday evening, with a short daily break, so the price you see on a weekend is the last price from Friday.</p>
+
+        <h2>Questions</h2>
+        <h3>What is the price of oil today?</h3>
+        <p>The live Brent and WTI prices are shown at the top of this page, with the change since the previous close. The chart below them shows the trend.</p>
+        <h3>Why is Brent more expensive than WTI?</h3>
+        <p>Brent is produced at sea and can be loaded straight onto tankers for buyers anywhere, while WTI has to travel by pipeline from inland Oklahoma to the coast before it can be exported. That extra transport cost usually keeps WTI a few dollars cheaper.</p>
+        <h3>How many litres are in a barrel of oil?</h3>
+        <p>About 159 litres (42 US gallons).</p>
+        <h3>Where does the US buy its oil from?</h3>
+        <p>Mostly from Canada, followed by countries such as Mexico, Saudi Arabia, Iraq and Brazil. See our <a href="imports.html">map of US crude oil imports by country and port</a>.</p>
+
+        <p class="small-print">Prices are OANDA's Brent and WTI quotes via TradingView. They track the nearest-month futures closely but are not official ICE or NYMEX prices or settlements. For information only, not investment advice.</p>
+      </article>
     </div>
 
     <!-- Wide screens: sidebar ad that stays in view while scrolling -->
