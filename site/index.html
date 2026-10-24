@@ -1,0 +1,76 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Oil Prices Today: Live Brent and WTI Crude Price | oilprices.io</title>
+  <meta name="description" content="Live Brent and WTI crude oil prices in US dollars per barrel, with daily change and price history charts.">
+  <link rel="canonical" href="https://oilprices.io/">
+  <meta property="og:title" content="Oil Prices Today: Live Brent and WTI">
+  <meta property="og:description" content="Live Brent and WTI crude oil prices and price history.">
+  <meta property="og:url" content="https://oilprices.io/">
+  <meta property="og:type" content="website">
+  <meta name="theme-color" content="#0c3b45" media="(prefers-color-scheme: light)">
+  <meta name="theme-color" content="#0b2e37" media="(prefers-color-scheme: dark)">
+  <link rel="icon" href="favicon.svg" type="image/svg+xml">
+  <link rel="preload" href="fonts/archivo.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="preconnect" href="https://s3.tradingview.com">
+  <link rel="preconnect" href="https://s.tradingview.com">
+  <link rel="stylesheet" href="styles.css">
+  <script src="privacy-signals.js"></script>
+
+  <!-- ADSENSE: once Google gives you your publisher ID, replace ca-pub-XXXXXXXXXXXXXXXX
+       below (and in ads.txt), then delete the two comment lines around the script.
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-XXXXXXXXXXXXXXXX" crossorigin="anonymous"></script>
+  -->
+</head>
+<body>
+  <h1 class="visually-hidden">Brent and WTI crude oil prices today</h1>
+
+  <div class="band">
+    <header class="band-top wrap">
+      <a class="wordmark" href="/">oilprices<span>.io</span></a>
+    </header>
+    <section class="quotes wrap" aria-label="Live prices">
+      <div class="quote" data-tv-quote="brent" data-tv-theme="dark">
+        <h2 class="visually-hidden">Brent crude</h2>
+        <div class="tv-slot tv-slot-quote" data-tv-target></div>
+        <p class="tv-fallback" data-tv-fallback hidden>Brent price didn't load. If you use an ad blocker, allow tradingview.com and refresh.</p>
+      </div>
+      <div class="quote" data-tv-quote="wti" data-tv-theme="dark">
+        <h2 class="visually-hidden">WTI crude</h2>
+        <div class="tv-slot tv-slot-quote" data-tv-target></div>
+        <p class="tv-fallback" data-tv-fallback hidden>WTI price didn't load. If you use an ad blocker, allow tradingview.com and refresh.</p>
+      </div>
+    </section>
+  </div>
+
+  <main class="wrap">
+    <section class="history" aria-label="Price history chart" data-tv-chart>
+      <div class="tv-slot tv-slot-chart" data-tv-target></div>
+      <p class="tv-fallback" data-tv-fallback hidden>Chart didn't load. If you use an ad blocker, allow tradingview.com and refresh.</p>
+      <p class="tv-credit"><a href="https://www.tradingview.com/" rel="noopener nofollow" target="_blank">Track all markets on TradingView</a></p>
+    </section>
+
+    <section class="about" aria-label="About these prices">
+      <p><strong>About these prices.</strong> OANDA's Brent and WTI quotes via TradingView, in US dollars per barrel. They track the nearest-month futures closely but are not official ICE or NYMEX prices or settlements. Oil trades from Sunday evening to Friday evening; outside those hours the last price is shown.</p>
+      <p><strong>Brent</strong> is North Sea crude, traded on ICE in London, and prices most internationally traded oil. <strong>WTI</strong> is US crude, traded on NYMEX in New York and delivered at Cushing, Oklahoma. Brent usually trades a few dollars above WTI.</p>
+      <p>For information only. Not investment advice.</p>
+    </section>
+  </main>
+
+  <footer class="foot wrap">
+    <p>© <span id="year">2026</span> oilprices.io</p>
+    <p><a href="privacy.html">Privacy policy</a></p>
+    <p><a href="terms.html">Terms of use</a></p>
+    <p><a href="#" data-consent-settings>Privacy and cookie settings</a></p>
+    <p><a href="privacy.html#us-choices">Do Not Sell or Share My Personal Information</a></p>
+    <p><a href="mailto:fluojellyfish.games@gmail.com">fluojellyfish.games@gmail.com</a></p>
+    <p class="gpc-notice" data-gpc-notice hidden>Opt-out request honored (Global Privacy Control)</p>
+  </footer>
+
+  <script src="widgets.js" defer></script>
+  <script src="consent.js" defer></script>
+  <script>document.getElementById("year").textContent = new Date().getFullYear();</script>
+</body>
+</html>

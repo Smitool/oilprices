@@ -1,0 +1,136 @@
+@font-face {
+  font-family: "Archivo";
+  src: url("fonts/archivo.woff2") format("woff2-variations");
+  font-weight: 100 900;
+  font-stretch: 62% 125%;
+  font-display: swap;
+}
+
+:root {
+  color-scheme: light;
+  --bg: #f3f5f5;
+  --ink: #13222c;
+  --ink-2: #4c5a64;
+  --ink-3: #6b7880;
+  --rule: #d3dadc;
+  --accent: #0b5563;
+  --band: #0c3b45;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    color-scheme: dark;
+    --bg: #0e1b23;
+    --ink: #e8eef0;
+    --ink-2: #a9b6bd;
+    --ink-3: #8795a0;
+    --rule: #26363f;
+    --accent: #6cc3d1;
+    --band: #0b2e37;
+  }
+}
+
+*, *::before, *::after { box-sizing: border-box; }
+
+html { -webkit-text-size-adjust: 100%; }
+
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--ink);
+  font-family: "Archivo", system-ui, sans-serif;
+  font-size: 1rem;
+  line-height: 1.5;
+  font-variant-numeric: tabular-nums;
+}
+
+a { color: var(--accent); text-underline-offset: 0.18em; }
+
+:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; border-radius: 2px; }
+
+.visually-hidden {
+  position: absolute; width: 1px; height: 1px; overflow: hidden;
+  clip: rect(0 0 0 0); white-space: nowrap;
+}
+
+.wrap { width: min(100% - 2.5rem, 68rem); margin-inline: auto; }
+
+/* Header */
+.top {
+  display: flex; flex-wrap: wrap; align-items: baseline; justify-content: space-between;
+  gap: 0.5rem 2rem;
+  padding-block: 1.5rem 1rem;
+}
+.wordmark {
+  color: var(--ink); text-decoration: none;
+  font-weight: 800; font-stretch: 125%; font-size: 1.25rem; letter-spacing: -0.01em;
+}
+.wordmark span { color: var(--ink-3); font-weight: 500; }
+.status { margin: 0; color: var(--ink-2); font-size: 0.875rem; }
+
+/* Price band: the one bold element. Deep petrol, quotes on it in TradingView's dark theme */
+.band { background: var(--band); color: #fff; }
+.band-top { padding-block: 1.25rem 0.5rem; }
+.band .wordmark { color: #fff; }
+.band .wordmark span { color: rgba(255, 255, 255, 0.55); }
+
+.quotes { display: grid; grid-template-columns: 1fr 1fr; padding-bottom: 1.25rem; }
+.quote { padding: 0.75rem 1.75rem 0.5rem 0; min-width: 0; }
+.quote + .quote { padding: 0.75rem 0 0.5rem 1.75rem; border-left: 1px solid rgba(255, 255, 255, 0.14); }
+
+.tv-slot { position: relative; }
+.tv-slot-quote { min-height: 180px; }
+.tv-slot-chart { height: 520px; }
+.tv-slot .tradingview-widget-container,
+.tv-slot .tradingview-widget-container__widget { width: 100%; height: 100%; }
+.tv-fallback { margin: 0.5rem 0 0; font-size: 0.875rem; color: var(--ink-2); }
+.band .tv-fallback { color: rgba(255, 255, 255, 0.75); }
+.tv-credit { margin: 0.4rem 0 0; font-size: 0.75rem; }
+.tv-credit a { color: var(--ink-3); }
+
+/* Chart */
+.history { padding-top: 2rem; }
+
+/* About: small print */
+.about {
+  margin-top: 2.5rem; padding-top: 1rem;
+  border-top: 1px solid var(--rule);
+  columns: 2 22rem; column-gap: 2.5rem;
+  font-size: 0.8125rem; line-height: 1.55; color: var(--ink-3);
+}
+.about p { margin: 0 0 0.6rem; break-inside: avoid; }
+.about strong { color: var(--ink-2); font-weight: 600; }
+
+/* Footer */
+.foot {
+  display: flex; flex-wrap: wrap; gap: 0.4rem 1.5rem;
+  margin-top: 2rem; padding-block: 1rem 2rem;
+  font-size: 0.8125rem; color: var(--ink-3);
+}
+.foot p { margin: 0; }
+.foot a { color: var(--ink-3); text-decoration: none; }
+.foot a:hover { color: var(--ink); text-decoration: underline; }
+.gpc-notice { color: var(--ink-2); }
+
+/* Legal pages */
+.doc { padding-bottom: 1rem; }
+.doc > * { max-width: 40rem; }
+.doc h1 { font-size: 2rem; font-stretch: 115%; font-weight: 750; margin: 1rem 0 0.5rem; letter-spacing: -0.01em; }
+.doc h2 { font-size: 1.125rem; margin: 2rem 0 0; }
+.doc h3 { font-size: 1rem; margin: 1.25rem 0 0; }
+.doc p, .doc li { color: var(--ink-2); }
+.doc ul { padding-left: 1.25rem; }
+.optout-status { font-weight: 600; color: var(--ink) !important; }
+.optout-button {
+  font: inherit; font-size: 0.9375rem; font-weight: 600;
+  color: var(--bg); background: var(--ink); border: 0; border-radius: 6px;
+  padding: 0.55rem 1rem; cursor: pointer;
+}
+
+@media (max-width: 720px) {
+  .wrap { width: min(100% - 2rem, 68rem); }
+  .quotes { grid-template-columns: 1fr; }
+  .quote { padding: 0.5rem 0; }
+  .quote + .quote { padding: 0.75rem 0 0.5rem; border-left: 0; border-top: 1px solid rgba(255, 255, 255, 0.14); }
+  .tv-slot-chart { height: 420px; }
+}
