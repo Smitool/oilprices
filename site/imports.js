@@ -11,7 +11,7 @@
   var MAX_ROUTES = 250;
   var reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
-  var S = { period: 0, grade: "", origin: "", st: "", playTimer: null, pinned: false };
+  var S = { period: 0, grade: "", origin: "", st: "", playTimer: null, pinned: false, fitNext: true, fitAnimate: false };
   var D, mult = 1000, map, current, ready = false;
   var mapEl = $("map"), tip = $("map-tip"), msg = $("map-msg");
   var HOME = function () {
@@ -99,12 +99,12 @@
 
     m.addEventListener("change", function () { stopPlay(); S.period = +m.value; update(); });
     g.addEventListener("change", function () { S.grade = g.value; update(); });
-    o.addEventListener("change", function () { S.origin = o.value; update(); });
-    s.addEventListener("change", function () { S.st = s.value; update(); });
+    o.addEventListener("change", function () { S.origin = o.value; S.fitNext = true; S.fitAnimate = true; update(); });
+    s.addEventListener("change", function () { S.st = s.value; S.fitNext = true; S.fitAnimate = true; update(); });
     $("filters").addEventListener("submit", function (e) { e.preventDefault(); });
     $("filters").addEventListener("reset", function () {
       stopPlay();
-      setTimeout(function () { S.period = D.periods.length - 1; S.grade = ""; S.origin = ""; S.st = ""; m.value = S.period; update(); });
+      setTimeout(function () { S.period = D.periods.length - 1; S.grade = ""; S.origin = ""; S.st = ""; m.value = S.period; S.fitNext = true; S.fitAnimate = true; update(); });
     });
     $("f-play").addEventListener("click", function () { S.playTimer ? stopPlay() : startPlay(); });
   }
@@ -159,7 +159,7 @@
     });
     map.touchZoomRotate.disableRotation();
     map.addControl(new maplibregl.NavigationControl({ showCompass: false }), "top-right");
-    $("z-reset").addEventListener("click", function () { var h = HOME(); map.flyTo({ center: h.center, zoom: h.zoom, duration: 600 }); });
+    $("z-reset").addEventListener("click", function () { fitAll(true); });
 
     map.on("load", function () {
       map.addSource("routes", { type: "geojson", data: { type: "FeatureCollection", features: [] } });
@@ -188,7 +188,7 @@
   // ---------- oil flow animation ----------
   // Streaks of oil move along each route on a canvas above the map. They start slowly at the
   // country of origin and speed up as they approach the US port, stretching as they accelerate.
-  var BASE_OPACITY = reduceMotion ? 0.6 : 0.26;
+  var BASE_OPACITY = reduceMotion ? 0.65 : 0.3;
   var Flow = {
     canvas: null, ctx: null, routes: [], dirty: true, hot: null, dpr: 1,
     init: function () {
@@ -207,8 +207,8 @@
         var r = f.properties, km = f.properties.km;
         return {
           k: r.k, o: r.o, p: r.p, w: r.w, coords: f.geometry.coordinates,
-          n: Math.max(3, Math.round(3 + 12 * Math.sqrt(r.v / maxV))),  // more oil, more streaks
-          T: 3 + km / 2200,                                              // seconds from origin to port
+          n: Math.max(3, Math.round(3 + 8 * Math.sqrt(r.v / maxV))),   // more oil, more streaks
+          T: 8 + km / 900,                                               // seconds from origin to port
           phase: Math.random(), px: null, cum: null
         };
       });
@@ -238,6 +238,17 @@
       var seg = r.cum[i] - r.cum[i - 1] || 1, f = (L - r.cum[i - 1]) / seg;
       return [r.px[i - 1][0] + (r.px[i][0] - r.px[i - 1][0]) * f, r.px[i - 1][1] + (r.px[i][1] - r.px[i - 1][1]) * f];
     },
+    path: function (r, s0, s1) {
+      var L = r.cum[r.cum.length - 1], a = s0 * L, b = s1 * L, pts = [this.at(r, s0)];
+      for (var i = 1; i < r.cum.length - 1; i++) if (r.cum[i] > a && r.cum[i] < b) pts.push(r.px[i]);
+      pts.push(this.at(r, s1));
+      return pts;
+    },
+    stroke: function (pts) {
+      var c = this.ctx; c.beginPath(); c.moveTo(pts[0][0], pts[0][1]);
+      for (var i = 1; i < pts.length; i++) c.lineTo(pts[i][0], pts[i][1]);
+      c.stroke();
+    },
     match: function (r) {
       var h = this.hot;
       if (!h) return true;
@@ -250,23 +261,21 @@
       ctx.setTransform(1, 0, 0, 1, 0, 0);
       ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
       ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
-      ctx.lineCap = "round";
-      var ease = function (u) { return Math.pow(u, 2.2); };       // slow start, fast finish
+      ctx.lineCap = "round"; ctx.lineJoin = "round";
+      var ease = function (u) { return Math.pow(u, 1.8); };       // slow start, faster finish
       this.routes.forEach(function (r) {
         if (!r.px || r.cum[r.cum.length - 1] < 4) return;
         var on = self.match(r), alpha = on ? 1 : 0.07;
-        var width = Math.max(1.8, r.w * 0.75);
+        var width = r.w * 0.5, sheen = Math.max(0.6, r.w * 0.14);
         for (var j = 0; j < r.n; j++) {
           var u = (now / r.T + r.phase + j / r.n) % 1;
-          var s1 = ease(u), s0 = ease(Math.max(0, u - 0.09));      // tail: longer when moving faster
+          var s1 = ease(u), s0 = ease(Math.max(0, u - 0.07));      // tail: longer when moving faster
           var fade = Math.min(1, u / 0.08, (1 - u) / 0.06);         // ease in at origin, sink into the port
           if (fade <= 0) continue;
-          var a = self.at(r, s0), b = self.at(r, s1);
+          var pts = self.path(r, s0, s1);
           ctx.globalAlpha = alpha * fade;
-          ctx.strokeStyle = "#000000"; ctx.lineWidth = width;
-          ctx.beginPath(); ctx.moveTo(a[0], a[1]); ctx.lineTo(b[0], b[1]); ctx.stroke();
-          ctx.strokeStyle = "rgba(255,255,255,0.28)"; ctx.lineWidth = Math.max(0.6, width * 0.28);   // oily sheen
-          ctx.beginPath(); ctx.moveTo(a[0], a[1]); ctx.lineTo(b[0], b[1]); ctx.stroke();
+          ctx.strokeStyle = "#000000"; ctx.lineWidth = width; self.stroke(pts);
+          ctx.strokeStyle = "rgba(255,255,255,0.3)"; ctx.lineWidth = sheen; self.stroke(pts);   // oily sheen
         }
       });
       ctx.globalAlpha = 1;
@@ -290,7 +299,7 @@
     var maxV = routes.length ? routes[0].v : 1;
     var feats = routes.map(function (r, i) {
       var o = D.origins[r.o], p = D.ports[r.p];
-      return { type: "Feature", id: i, properties: { k: r.k, o: r.o, p: r.p, v: r.v, w: 1.2 + 9 * Math.sqrt(r.v / maxV), km: km([o.lon, o.lat], [p.lon, p.lat]) },
+      return { type: "Feature", id: i, properties: { k: r.k, o: r.o, p: r.p, v: r.v, w: 3 + 11 * Math.sqrt(r.v / maxV), km: km([o.lon, o.lat], [p.lon, p.lat]) },
         geometry: { type: "LineString", coordinates: arc([o.lon, o.lat], [p.lon, p.lat], 64) } };
     });
     map.getSource("routes").setData({ type: "FeatureCollection", features: feats });
@@ -312,6 +321,20 @@
         label: topP.indexOf(p) >= 0 ? c.name : "" }, geometry: { type: "Point", coordinates: [c.lon, c.lat] } });
     });
     map.getSource("points").setData({ type: "FeatureCollection", features: pts });
+    if (S.fitNext) { fitAll(S.fitAnimate); S.fitNext = false; }
+  }
+
+  // Show every route in the current selection (origins and ports), so no country is off-screen.
+  function fitAll(animate) {
+    var b = new maplibregl.LngLatBounds(), any = false;
+    current.routes.forEach(function (r) {
+      var o = D.origins[r.o], p = D.ports[r.p];
+      if (o.lon == null) return;
+      b.extend([o.lon, o.lat]); b.extend([p.lon, p.lat]); any = true;
+    });
+    if (!any) { var h = HOME(); map.jumpTo(h); return; }
+    var narrow = mapEl.clientWidth < 760;
+    map.fitBounds(b, { padding: narrow ? 30 : { top: 60, bottom: 40, left: 60, right: 60 }, maxZoom: 5, duration: animate ? 800 : 0 });
   }
 
   // ---------- hover & tooltips ----------
@@ -399,7 +422,7 @@
     $("k-day").textContent = t ? fmtShort(t / daysIn(S.period)) + " bbl" : "–";
     $("k-countries").textContent = t ? Object.keys(current.byO).length : "–";
     bars($("b-origins"), current.byO, function (i) { return D.origins[i].name; }, function (i) {
-      S.origin = S.origin === String(i) ? "" : String(i); $("f-origin").value = S.origin; update();
+      S.origin = S.origin === String(i) ? "" : String(i); $("f-origin").value = S.origin; S.fitNext = true; S.fitAnimate = true; update();
     });
     bars($("b-ports"), current.byP, function (i) { return D.ports[i].name; });
   }
