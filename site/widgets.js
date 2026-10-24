@@ -51,9 +51,19 @@
     });
 
     var chart = document.querySelector("[data-tv-chart]");
-    if (chart) {
+    if (chart) whenIdle(function () { mountChart(chart, theme, c); });
+  }
+
+  // Run after the price widgets have started loading (or within 1.2 s at the latest).
+  function whenIdle(fn) {
+    if ("requestIdleCallback" in window) window.requestIdleCallback(fn, { timeout: 1200 });
+    else setTimeout(fn, 400);
+  }
+
+  function mountChart(chart, theme, c) {
+    {
       mount(chart, "embed-widget-symbol-overview.js", {
-        symbols: [["Brent", SYMBOLS.brent + "|1D"], ["WTI", SYMBOLS.wti + "|1D"]],
+        symbols: [["Brent", SYMBOLS.brent + "|12M"], ["WTI", SYMBOLS.wti + "|12M"]],
         chartOnly: false,
         width: "100%",
         height: "100%",
