@@ -5,10 +5,11 @@ on:
     branches: [main]
   schedule:
     - cron: "17 6 * * 1"     # every Monday: check EIA for new monthly import data
+    - cron: "17 6 * * 4,5"   # Thursday and Friday: EIA's weekly spot prices (published on Wednesdays)
   workflow_dispatch:          # lets you run it by hand from the Actions tab
 
 permissions:
-  contents: write   # to save new import data back to the repo
+  contents: write   # to save new data back to the repo
   pages: write
   id-token: write
 
@@ -35,13 +36,19 @@ jobs:
           EIA_API_KEY: ${{ secrets.EIA_API_KEY }}
         run: python scripts/fetch_imports.py
 
+      - name: Update official Brent and WTI spot prices from EIA
+        id: prices
+        env:
+          EIA_API_KEY: ${{ secrets.EIA_API_KEY }}
+        run: python scripts/fetch_prices.py
+
       - name: Save new data to the repo
-        if: steps.imports.outputs.changed == 'true'
+        if: steps.imports.outputs.changed == 'true' || steps.prices.outputs.changed == 'true'
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add site/data/imports.json site/imports.html site/sitemap.xml
-          git commit -m "Update US crude imports data" || exit 0
+          git add site/data site/index.html site/imports.html site/sitemap.xml
+          git commit -m "Update EIA data" || exit 0
           git pull --rebase
           git push
 
