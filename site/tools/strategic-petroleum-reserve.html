@@ -1,0 +1,288 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>US Strategic Petroleum Reserve (SPR) Level Today: Live Tracker | oilprices.io</title>
+  <meta name="description" content="How much oil is in the US Strategic Petroleum Reserve this week, how many days it would last, and how long it would take to refill. Weekly EIA data with an interactive barrel and history since 1982.">
+  <link rel="canonical" href="https://oilprices.io/tools/strategic-petroleum-reserve.html">
+  <meta property="og:title" content="US Strategic Petroleum Reserve level: live tracker">
+  <meta property="og:description" content="This week's SPR level, days of cover and refill time, with an interactive barrel and history since 1982.">
+  <meta property="og:url" content="https://oilprices.io/tools/strategic-petroleum-reserve.html">
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="oilprices.io">
+  <meta property="og:image" content="https://oilprices.io/og-prices.png">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="theme-color" content="#0a1d24" media="(prefers-color-scheme: light)">
+  <meta name="theme-color" content="#071419" media="(prefers-color-scheme: dark)">
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+  <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+  <link rel="preload" href="/fonts/archivo.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="preload" href="/data/spr.json" as="fetch" crossorigin>
+  <link rel="stylesheet" href="/styles.css">
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "WebPage",
+        "@id": "https://oilprices.io/tools/strategic-petroleum-reserve.html#page",
+        "url": "https://oilprices.io/tools/strategic-petroleum-reserve.html",
+        "name": "US Strategic Petroleum Reserve (SPR) level: live tracker",
+        "isPartOf": { "@type": "WebSite", "name": "oilprices.io", "url": "https://oilprices.io/" },
+        "dateModified": "2026-10-25",
+        "inLanguage": "en"
+      },
+      {
+        "@type": "Dataset",
+        "name": "US Strategic Petroleum Reserve crude oil stocks, weekly",
+        "description": "Weekly ending stocks of crude oil in the US Strategic Petroleum Reserve, in thousand barrels, from the U.S. Energy Information Administration (series WCSSTUS1).",
+        "url": "https://oilprices.io/tools/strategic-petroleum-reserve.html",
+        "isBasedOn": "https://www.eia.gov/dnav/pet/hist/LeafHandler.ashx?n=PET&s=WCSSTUS1&f=W",
+        "creator": { "@type": "Organization", "name": "U.S. Energy Information Administration", "url": "https://www.eia.gov" },
+        "isAccessibleForFree": true,
+        "spatialCoverage": "United States",
+        "distribution": { "@type": "DataDownload", "encodingFormat": "application/json", "contentUrl": "https://oilprices.io/data/spr.json" }
+      },
+      {
+        "@type": "BreadcrumbList",
+        "itemListElement": [
+          { "@type": "ListItem", "position": 1, "name": "Oil prices", "item": "https://oilprices.io/" },
+          { "@type": "ListItem", "position": 2, "name": "Tools", "item": "https://oilprices.io/tools/" },
+          { "@type": "ListItem", "position": 3, "name": "US Strategic Petroleum Reserve", "item": "https://oilprices.io/tools/strategic-petroleum-reserve.html" }
+        ]
+      }
+    ]
+  }
+  </script>
+  <script src="/privacy-signals.js"></script>
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9932307887793247" crossorigin="anonymous"></script>
+</head>
+<body>
+  <div class="band">
+    <header class="band-top wrap">
+      <a class="wordmark" href="/">oilprices<span>.io</span></a>
+      <nav class="site-nav" aria-label="Main">
+        <a href="/">Oil prices</a>
+        <a href="/imports.html">US oil imports</a>
+        <a href="/tools/" aria-current="page">Tools</a>
+        <a href="/about.html">About</a>
+      </nav>
+    </header>
+    <div class="tool-head wrap">
+      <p class="crumbs-band"><a href="/tools/">Tools</a></p>
+      <h1>US Strategic Petroleum Reserve (SPR)</h1>
+      <p>How much emergency oil the United States holds this week, how long it would last, and how long it would take to refill.</p>
+    </div>
+  </div>
+
+  <main class="wrap layout">
+    <div class="content">
+      <section class="spr" aria-label="Interactive SPR barrel">
+        <div class="spr-stage">
+          <div class="spr-barrel-wrap">
+            <svg class="spr-barrel" id="spr-barrel" viewBox="0 0 320 400" role="img" aria-labelledby="spr-barrel-title">
+              <title id="spr-barrel-title">Oil barrel showing how full the Strategic Petroleum Reserve is</title>
+              <defs>
+                <clipPath id="spr-clip"><path d="M58 52 Q40 200 58 348 Q160 372 262 348 Q280 200 262 52 Q160 28 58 52 Z"/></clipPath>
+                <linearGradient id="spr-oil" x1="0" y1="0" x2="0" y2="1">
+                  <stop offset="0" stop-color="#3b2a12"/>
+                  <stop offset="0.25" stop-color="#1f1608"/>
+                  <stop offset="1" stop-color="#0b0804"/>
+                </linearGradient>
+                <linearGradient id="spr-sheen" x1="0" y1="0" x2="1" y2="0">
+                  <stop offset="0" stop-color="#fff" stop-opacity="0"/>
+                  <stop offset="0.28" stop-color="#fff" stop-opacity="0.16"/>
+                  <stop offset="0.4" stop-color="#fff" stop-opacity="0"/>
+                  <stop offset="1" stop-color="#fff" stop-opacity="0"/>
+                </linearGradient>
+                <linearGradient id="spr-steel" x1="0" y1="0" x2="1" y2="0">
+                  <stop offset="0" stop-color="#0b5563"/>
+                  <stop offset="0.35" stop-color="#2a8797"/>
+                  <stop offset="0.6" stop-color="#0d6676"/>
+                  <stop offset="1" stop-color="#083f4a"/>
+                </linearGradient>
+              </defs>
+              <!-- inside of the barrel -->
+              <path class="spr-inside" d="M58 52 Q40 200 58 348 Q160 372 262 348 Q280 200 262 52 Q160 28 58 52 Z"/>
+              <g clip-path="url(#spr-clip)">
+                <path id="spr-wave-back" class="spr-wave-back" d=""/>
+                <path id="spr-wave" fill="url(#spr-oil)" d=""/>
+                <path id="spr-surface" class="spr-surface" d=""/>
+                <rect x="40" y="0" width="240" height="400" fill="url(#spr-sheen)"/>
+              </g>
+              <!-- capacity marks -->
+              <g class="spr-marks" id="spr-marks"></g>
+              <!-- steel frame: rims and hoops -->
+              <path class="spr-frame" d="M58 52 Q40 200 58 348 Q160 372 262 348 Q280 200 262 52 Q160 28 58 52 Z"/>
+              <ellipse class="spr-rim" cx="160" cy="46" rx="104" ry="16"/>
+              <path class="spr-hoop" d="M50 150 Q160 176 270 150"/>
+              <path class="spr-hoop" d="M50 250 Q160 276 270 250"/>
+              <path class="spr-rim-bottom" d="M58 348 Q160 372 262 348"/>
+              <!-- level marker -->
+              <g id="spr-level" class="spr-level">
+                <line x1="262" x2="300" y1="0" y2="0"/>
+                <circle cx="300" cy="0" r="9"/>
+                <path d="M296 -2 l4 -4 l4 4 M296 2 l4 4 l4 -4" class="spr-grip"/>
+              </g>
+            </svg>
+            <p class="spr-drag-hint" id="spr-hint">Drag the oil level or tap the barrel to explore</p>
+            <div class="spr-play">
+              <button type="button" class="spr-play-btn" id="spr-play" aria-pressed="false">
+                <svg width="14" height="14" viewBox="0 0 14 14" aria-hidden="true"><path id="spr-play-icon" d="M3 1.5v11l9-5.5z" fill="currentColor"/></svg>
+                <span>Play the last 12 months</span>
+              </button>
+              <input type="range" id="spr-time" min="0" max="100" value="100" aria-label="Week to show">
+              <output id="spr-time-out" class="spr-time-out">–</output>
+            </div>
+          </div>
+
+          <div class="spr-panel">
+            <p class="spr-mode" id="spr-mode">This week</p>
+            <p class="spr-big"><span id="spr-mb">–</span> <span class="spr-unit">million barrels</span></p>
+            <p class="spr-sub" id="spr-sub">–</p>
+            <ul class="bm-chips spr-chips" id="spr-chips"></ul>
+
+            <dl class="spr-est">
+              <div><dt>Days of total US oil use</dt><dd id="spr-days-use">–</dd><dd class="spr-basis" id="spr-basis-use"></dd></div>
+              <div><dt>Days of US net crude imports</dt><dd id="spr-days-imp">–</dd><dd class="spr-basis" id="spr-basis-imp"></dd></div>
+              <div><dt>Days at the maximum release rate</dt><dd id="spr-days-max">–</dd><dd class="spr-basis">at 4.4 million barrels a day</dd></div>
+              <div><dt>Time to refill to capacity</dt><dd id="spr-refill">–</dd><dd class="spr-basis" id="spr-refill-basis"></dd></div>
+            </dl>
+
+            <div class="spr-controls">
+              <label for="spr-rate">Refill pace: <strong id="spr-rate-out">–</strong> million barrels a month</label>
+              <input type="range" id="spr-rate" min="0.5" max="10" step="0.1" value="3">
+              <label for="spr-price" class="spr-price-label">Cost to refill at <span class="spr-price-wrap">$<input type="number" id="spr-price" min="1" step="1" value="100"></span> a barrel: <strong id="spr-cost">–</strong></label>
+            </div>
+            <button type="button" class="fc-link spr-reset" id="spr-reset" hidden>Back to this week's level</button>
+          </div>
+        </div>
+
+      </section>
+
+      <section class="fc-history spr-history" aria-labelledby="spr-hist-h">
+        <div class="bm-chart-head">
+          <h2 id="spr-hist-h">SPR level since 1982</h2>
+          <div class="seg" role="group" aria-label="Time range">
+            <button type="button" data-range="1y">1Y</button>
+            <button type="button" data-range="10y">10Y</button>
+            <button type="button" data-range="all" aria-pressed="true">All</button>
+          </div>
+        </div>
+        <div class="chart-box spr-chart"><div class="chart-tip" hidden></div></div>
+        <p class="fc-note">Million barrels. Dashed line: authorized capacity of 714 million barrels. Source: U.S. Energy Information Administration.</p>
+      </section>
+
+      <aside class="ad-slot ad-inline" aria-label="Advertisement">
+        <p class="ad-label">Advertisement</p>
+        <ins class="adsbygoogle" style="display:block"
+             data-ad-client="ca-pub-9932307887793247"
+             data-ad-slot="AD_SLOT_INLINE"
+             data-ad-format="auto"
+             data-full-width-responsive="true"></ins>
+      </aside>
+
+      <article class="article">
+        <h2>How much oil is in the SPR right now?</h2>
+<!-- SPRNOW:START -->
+<p>In the week ending 16 October 2026, the Strategic Petroleum Reserve held <strong>282.7 million barrels</strong> of crude oil, 39.6% of its authorized capacity of 714 million barrels. That is 124.3 million barrels less than a year earlier. It is the lowest level since September 1982.</p>
+<p>At the average rate the United States used oil over the past four weeks, 21.1 million barrels a day, the reserve would cover about <strong>13 days</strong> of total US oil use on its own, or about 141 days of US net crude oil imports (2.0 million barrels a day).</p>
+<!-- SPRNOW:END -->
+
+        <h2>What is the Strategic Petroleum Reserve?</h2>
+        <p>The Strategic Petroleum Reserve is the United States' emergency stock of crude oil, owned by the federal government and run by the Department of Energy. Congress created it in 1975, after the 1973–74 Arab oil embargo showed how exposed the country was to a sudden cut in supply. The first oil arrived in 1977.</p>
+        <p>The oil is stored in 61 huge caverns hollowed out of salt domes deep underground at four sites on the Gulf Coast: Bryan Mound and Big Hill in Texas, and West Hackberry and Bayou Choctaw in Louisiana. Salt caverns are cheap to build, naturally sealed and close to the refineries and pipelines that would use the oil. Together they are authorized to hold 714 million barrels. The reserve was last full in December 2009, at 726.6 million barrels.</p>
+
+        <h2>How oil is released</h2>
+        <p>Only the President can order an emergency drawdown, either a full drawdown for a severe supply interruption or a limited one for a smaller shortage. The Department of Energy can also run test sales and exchanges on its own authority. Once a release is ordered, oil can start reaching the market in about 13 days, at up to 4.4 million barrels a day in theory.</p>
+        <p>Releases happen in three main ways. In a <strong>sale</strong>, oil is sold to companies at market prices. In an <strong>exchange</strong>, companies borrow oil and later return it with extra barrels as a premium, so the reserve ends up with more than it lent. And Congress has at times ordered <strong>mandated sales</strong> to raise money for the federal budget.</p>
+
+        <h2>How it is refilled</h2>
+        <p>The reserve refills in two ways. The Department of Energy can <strong>buy oil</strong>, but only with money set aside by Congress, and only as fast as the sites can take oil in. And <strong>exchange returns</strong> bring oil back as companies repay the barrels they borrowed, plus the premium. Refilling is much slower than releasing: in 2024, the reserve grew by about 3 million barrels a month, while in May 2026 it fell by almost 10 million barrels in a single week.</p>
+
+        <h2>Why the reserve is so low</h2>
+<!-- SPRWHY:START -->
+<p>The reserve peaked at 726.6 million barrels in December 2009. Since then it has been drawn down by mandated sales ordered by Congress, by a 180-million-barrel emergency sale in 2022 after Russia invaded Ukraine, and by the 2026 emergency release: after the Strait of Hormuz was closed in March 2026, the United States committed 172 million barrels to a 400-million-barrel release coordinated by the International Energy Agency, mostly as exchanges that companies must repay with extra barrels.</p>
+<p>Since the end of 2025, the reserve has lost 130.8 million barrels.</p>
+<!-- SPRWHY:END -->
+
+        <h2>SPR level by year</h2>
+<!-- SPRYEARS:START -->
+<table class="summary-table"><caption>SPR crude oil stocks at the end of each year, million barrels</caption><thead><tr><th scope="col">Year</th><th scope="col">Stocks</th><th scope="col">Full</th><th scope="col">Change in the year</th></tr></thead><tbody>
+<tr><th scope="row">2026 (latest week)</th><td>282.7</td><td>40%</td><td>−130.8</td></tr>
+<tr><th scope="row">2025</th><td>413.5</td><td>58%</td><td>+19.9</td></tr>
+<tr><th scope="row">2024</th><td>393.6</td><td>55%</td><td>+38.9</td></tr>
+<tr><th scope="row">2023</th><td>354.7</td><td>50%</td><td>−17.3</td></tr>
+<tr><th scope="row">2022</th><td>372.0</td><td>52%</td><td>−221.7</td></tr>
+<tr><th scope="row">2021</th><td>593.7</td><td>83%</td><td>−44.4</td></tr>
+<tr><th scope="row">2020</th><td>638.1</td><td>89%</td><td>+3.1</td></tr>
+<tr><th scope="row">2019</th><td>635.0</td><td>89%</td><td>−14.2</td></tr>
+<tr><th scope="row">2018</th><td>649.1</td><td>91%</td><td>−13.7</td></tr>
+<tr><th scope="row">2017</th><td>662.8</td><td>93%</td><td>−32.3</td></tr>
+<tr><th scope="row">2016</th><td>695.1</td><td>97%</td><td>−0.0</td></tr>
+<tr><th scope="row">2015</th><td>695.1</td><td>97%</td><td>+4.2</td></tr>
+<tr><th scope="row">2014</th><td>691.0</td><td>97%</td><td>−5.0</td></tr>
+<tr><th scope="row">2013</th><td>696.0</td><td>97%</td><td>+0.7</td></tr>
+<tr><th scope="row">2012</th><td>695.3</td><td>97%</td><td>−0.7</td></tr>
+<tr><th scope="row">2011</th><td>696.0</td><td>97%</td><td>−30.6</td></tr>
+</tbody></table>
+<!-- SPRYEARS:END -->
+
+        <h2>How the estimates work</h2>
+        <p><strong>Days of total US oil use</strong> divides the oil in the reserve by the average amount of oil products the US used each day over the last four weeks. <strong>Days of US net crude imports</strong> divides it by the average net crude oil imports over the same four weeks, which is closer to how the International Energy Agency measures emergency stocks. <strong>Days at the maximum release rate</strong> uses the reserve's design capacity of 4.4 million barrels a day; the rate the sites can sustain today is reported to be lower. <strong>Time to refill</strong> assumes the pace you choose; the default is the pace of the most recent year in which the reserve grew. These are illustrations, not forecasts.</p>
+
+        <h2>Questions</h2>
+<!-- SPRFAQ:START -->
+<h3>How much oil is in the Strategic Petroleum Reserve?</h3>
+<p>282.7 million barrels in the week ending 16 October 2026, according to the U.S. Energy Information Administration. That is 40% of the reserve's authorized capacity of 714 million barrels.</p>
+<h3>How long would the SPR last?</h3>
+<p>On its own, about 13 days of total US oil use, at the recent rate of 21.1 million barrels a day. In practice the reserve is meant to fill gaps in supply, not replace it: at its maximum design release rate of 4.4 million barrels a day, the current stock would last about 64 days.</p>
+<h3>How long would it take to refill the SPR?</h3>
+<p>Refilling the remaining 431 million barrels at the 2025 pace of about 1.7 million barrels a month would take around 21 years. Exchange returns due from the 2026 release will add oil back faster for a while, and the barrel above lets you try other paces.</p>
+<!-- SPRFAQ:END -->
+        <h3>Who decides when to use the SPR?</h3>
+        <p>The President, for emergency drawdowns. The Department of Energy runs exchanges and test sales, and Congress sets mandated sales and provides money for purchases.</p>
+
+        <p class="small-print">Sources: <a href="https://www.eia.gov/dnav/pet/hist/LeafHandler.ashx?n=PET&amp;s=WCSSTUS1&amp;f=W">EIA weekly SPR stocks</a>, <a href="https://www.eia.gov/petroleum/supply/weekly/">EIA Weekly Petroleum Status Report</a> and the <a href="https://www.energy.gov/ceser/strategic-petroleum-reserve-9">Department of Energy's SPR quick facts</a>. EIA publishes new figures every Wednesday; this page updates the next morning. See <a href="/about.html">how this site works</a>.</p>
+      </article>
+    </div>
+
+    <aside class="ad-slot ad-rail" aria-label="Advertisement">
+      <div class="ad-rail-inner">
+        <p class="ad-label">Advertisement</p>
+        <ins class="adsbygoogle" style="display:inline-block;width:300px;height:600px"
+             data-ad-client="ca-pub-9932307887793247"
+             data-ad-slot="AD_SLOT_SIDEBAR"></ins>
+      </div>
+    </aside>
+  </main>
+
+  <footer class="foot wrap">
+    <p>© <span id="year">2026</span> oilprices.io</p>
+    <p><a href="/">Oil prices</a></p>
+    <p><a href="/tools/">Tools</a></p>
+    <p><a href="/tools/fuel-cost-calculator.html">Fuel cost calculator</a></p>
+    <p><a href="/about.html">About and methodology</a></p>
+    <p><a href="/privacy.html">Privacy policy</a></p>
+    <p><a href="/terms.html">Terms of use</a></p>
+    <p><a href="#" data-consent-settings>Privacy and cookie settings</a></p>
+    <p><a href="/privacy.html#us-choices">Do Not Sell or Share My Personal Information</a></p>
+    <p><a href="mailto:hello@oilprices.io">hello@oilprices.io</a></p>
+    <p class="gpc-notice" data-gpc-notice hidden>Opt-out request honored (Global Privacy Control)</p>
+  </footer>
+
+  <script src="/tools/spr.js" defer></script>
+  <script>
+    document.querySelectorAll("ins.adsbygoogle").forEach(function (ad) {
+      var slot = ad.closest(".ad-slot");
+      var hasId = /^\d+$/.test(ad.getAttribute("data-ad-slot"));
+      var visible = getComputedStyle(slot).display !== "none";
+      if (hasId && visible) (window.adsbygoogle = window.adsbygoogle || []).push({});
+      else if (!hasId) slot.hidden = true;
+    });
+  </script>
+  <script src="/consent.js" defer></script>
+  <script>document.getElementById("year").textContent = new Date().getFullYear();</script>
+</body>
+</html>

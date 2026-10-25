@@ -1,0 +1,256 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Fuel Cost Calculator: Gas Cost of Any Trip, in Your Currency | oilprices.io</title>
+  <meta name="description" content="Free fuel cost calculator: work out the gas or diesel cost of a trip in miles or km, MPG or L/100 km, in your own currency. Includes this week's US average gas price and 10 years of price history.">
+  <link rel="canonical" href="https://oilprices.io/tools/fuel-cost-calculator.html">
+  <meta property="og:title" content="Fuel cost calculator: the gas cost of any trip, in your currency">
+  <meta property="og:description" content="Trip fuel cost in miles or km, MPG or L/100 km, any currency, with 10 years of US gas price history.">
+  <meta property="og:url" content="https://oilprices.io/tools/fuel-cost-calculator.html">
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="oilprices.io">
+  <meta property="og:image" content="https://oilprices.io/og-prices.png">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="theme-color" content="#0a1d24" media="(prefers-color-scheme: light)">
+  <meta name="theme-color" content="#071419" media="(prefers-color-scheme: dark)">
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+  <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+  <link rel="preload" href="/fonts/archivo.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="preload" href="/data/fuel.json" as="fetch" crossorigin>
+  <link rel="stylesheet" href="/styles.css">
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "WebPage",
+        "@id": "https://oilprices.io/tools/fuel-cost-calculator.html#page",
+        "url": "https://oilprices.io/tools/fuel-cost-calculator.html",
+        "name": "Fuel cost calculator",
+        "description": "Work out the fuel cost of a trip in any currency and units, with weekly US gas prices and 10 years of history.",
+        "isPartOf": { "@type": "WebSite", "name": "oilprices.io", "url": "https://oilprices.io/" },
+        "dateModified": "2026-10-25",
+        "inLanguage": "en"
+      },
+      {
+        "@type": "BreadcrumbList",
+        "itemListElement": [
+          { "@type": "ListItem", "position": 1, "name": "Oil prices", "item": "https://oilprices.io/" },
+          { "@type": "ListItem", "position": 2, "name": "Tools", "item": "https://oilprices.io/tools/" },
+          { "@type": "ListItem", "position": 3, "name": "Fuel cost calculator", "item": "https://oilprices.io/tools/fuel-cost-calculator.html" }
+        ]
+      }
+    ]
+  }
+  </script>
+  <script src="/privacy-signals.js"></script>
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9932307887793247" crossorigin="anonymous"></script>
+</head>
+<body>
+  <div class="band">
+    <header class="band-top wrap">
+      <a class="wordmark" href="/">oilprices<span>.io</span></a>
+      <nav class="site-nav" aria-label="Main">
+        <a href="/">Oil prices</a>
+        <a href="/imports.html">US oil imports</a>
+        <a href="/tools/" aria-current="page">Tools</a>
+        <a href="/about.html">About</a>
+      </nav>
+    </header>
+    <div class="tool-head wrap">
+      <p class="crumbs-band"><a href="/tools/">Tools</a></p>
+      <h1>Fuel cost calculator</h1>
+      <p>Work out what a trip costs in fuel, in your own currency and units. Then see how far the same money would have taken you at US pump prices over the past 10 years.</p>
+    </div>
+  </div>
+
+  <main class="wrap layout">
+    <div class="content">
+      <form class="fc" id="fc" novalidate>
+        <div class="fc-inputs">
+          <div class="fc-field">
+            <label for="fc-distance">Trip distance</label>
+            <div class="fc-row">
+              <input id="fc-distance" name="d" type="number" inputmode="decimal" min="0" step="any" value="300">
+              <select id="fc-du" name="du" aria-label="Distance unit">
+                <option value="mi">miles</option>
+                <option value="km">km</option>
+              </select>
+            </div>
+            <label class="fc-check"><input type="checkbox" id="fc-round" name="rt"> Round trip (there and back)</label>
+          </div>
+
+          <div class="fc-field">
+            <label for="fc-eff">Fuel efficiency</label>
+            <div class="fc-row">
+              <input id="fc-eff" name="e" type="number" inputmode="decimal" min="0" step="any" value="30">
+              <select id="fc-eu" name="eu" aria-label="Fuel efficiency unit">
+                <option value="mpg">MPG (US)</option>
+                <option value="l100">L/100 km</option>
+                <option value="kml">km/L</option>
+                <option value="mpguk">MPG (UK)</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="fc-field">
+            <span class="fc-label" id="fc-fuel-label">Fuel</span>
+            <div class="seg fc-seg" role="radiogroup" aria-labelledby="fc-fuel-label">
+              <button type="button" role="radio" data-fuel="gasoline" aria-checked="true">Gasoline</button>
+              <button type="button" role="radio" data-fuel="diesel" aria-checked="false">Diesel</button>
+            </div>
+          </div>
+
+          <div class="fc-field">
+            <label for="fc-price">Fuel price</label>
+            <div class="fc-row fc-row-3">
+              <select id="fc-cur" name="c" aria-label="Currency"></select>
+              <input id="fc-price" name="p" type="number" inputmode="decimal" min="0" step="any" placeholder="Your price">
+              <select id="fc-pu" name="pu" aria-label="Price unit">
+                <option value="gal">per gallon</option>
+                <option value="l">per litre</option>
+              </select>
+            </div>
+            <p class="fc-ref" id="fc-ref">US average this week: <span data-ref-text>loading…</span> <button type="button" class="fc-link" id="fc-use-us">Use US average</button></p>
+          </div>
+
+          <div class="fc-field">
+            <label for="fc-people">Split the cost between</label>
+            <div class="fc-row fc-row-people">
+              <input id="fc-people" name="n" type="number" inputmode="numeric" min="1" step="1" value="1">
+              <span class="fc-unit">people</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="fc-results" aria-live="polite">
+          <p class="fc-res-label">Fuel cost for this trip</p>
+          <p class="fc-total" id="fc-total">–</p>
+          <p class="fc-person" id="fc-person" hidden></p>
+          <dl class="fc-stats">
+            <div><dt>Fuel needed</dt><dd id="fc-fuel">–</dd></div>
+            <div><dt id="fc-per-label">Cost per mile</dt><dd id="fc-per">–</dd></div>
+            <div><dt id="fc-per100-label">Cost per 100 miles</dt><dd id="fc-per100">–</dd></div>
+            <div><dt>CO₂ from the fuel</dt><dd id="fc-co2">–</dd></div>
+          </dl>
+          <p class="fc-hint" id="fc-hint" hidden>Enter your fuel price to see the cost.</p>
+          <div class="fc-actions">
+            <label class="fc-check fc-history-toggle"><input type="checkbox" id="fc-hist" name="h"> See historical data</label>
+            <button type="button" class="fc-link" id="fc-copy">Copy link to this result</button>
+          </div>
+        </div>
+      </form>
+
+      <section class="fc-history" id="fc-history" hidden aria-labelledby="fc-hist-h">
+        <div class="bm-chart-head">
+          <h2 id="fc-hist-h">How far <span data-hist-cost>this money</span> would have taken you</h2>
+          <div class="seg" role="group" aria-label="Time range">
+            <button type="button" data-range="1y">1Y</button>
+            <button type="button" data-range="5y">5Y</button>
+            <button type="button" data-range="10y" aria-pressed="true">10Y</button>
+          </div>
+        </div>
+        <p class="fc-hist-sub">Same car, same money, at each week's US average <span data-hist-fuel>gasoline</span> price.</p>
+        <div class="chart-box fc-chart"><div class="chart-tip" hidden></div></div>
+        <p class="chart-summary" id="fc-hist-summary"></p>
+        <p class="fc-note" id="fc-hist-note" hidden>Based on how the US average price changed. Prices in your country may have moved differently.</p>
+        <p class="fc-note">Source: U.S. Energy Information Administration, weekly US retail prices.</p>
+      </section>
+
+      <aside class="ad-slot ad-inline" aria-label="Advertisement">
+        <p class="ad-label">Advertisement</p>
+        <ins class="adsbygoogle" style="display:block"
+             data-ad-client="ca-pub-9932307887793247"
+             data-ad-slot="AD_SLOT_INLINE"
+             data-ad-format="auto"
+             data-full-width-responsive="true"></ins>
+      </aside>
+
+      <article class="article">
+        <h2>How the fuel cost is calculated</h2>
+        <p>The calculator works out how much fuel the trip needs, then multiplies it by the price you enter:</p>
+        <p class="formula">Fuel cost = distance ÷ fuel efficiency × fuel price</p>
+        <p>For example, a 300-mile trip in a car that does 30 miles per gallon needs 10 gallons. At $4.00 a gallon, that is $40. In metric units, a 500 km trip in a car that uses 6 litres per 100 km needs 30 litres; at €1.80 a litre, that is €54. You can mix units freely: enter the distance in km, the efficiency in MPG and the price per litre, and the calculator converts everything for you.</p>
+        <p>The CO₂ figure is the carbon dioxide released by burning that fuel, using the US Environmental Protection Agency's factors of 8,887 grams per gallon of gasoline and 10,180 grams per gallon of diesel.</p>
+
+        <h2>US gas prices this week</h2>
+<!-- FUELNOW:START -->
+<p class="fuel-now-lead">In the week of 19 October 2026, a gallon of regular gasoline cost <strong>$4.28</strong> on average in the United States (<strong>$1.13</strong> a litre), and a gallon of diesel cost <strong>$6.28</strong> ($1.66 a litre). A year earlier, regular gasoline averaged $3.02.</p>
+<p class="small-print">Source: U.S. Energy Information Administration, weekly retail prices, all formulations, including taxes. EIA publishes new prices every week; this page updates the next day.</p>
+<!-- FUELNOW:END -->
+
+        <h2>US gas prices by year</h2>
+<!-- FUELYEARS:START -->
+<table class="summary-table"><caption>Average US retail price per gallon, by year</caption><thead><tr><th scope="col">Year</th><th scope="col">Regular gasoline</th><th scope="col">Diesel</th></tr></thead><tbody>
+<tr><th scope="row">2026 (to date)</th><td>$3.86</td><td>$5.10</td></tr>
+<tr><th scope="row">2025</th><td>$3.10</td><td>$3.66</td></tr>
+<tr><th scope="row">2024</th><td>$3.30</td><td>$3.76</td></tr>
+<tr><th scope="row">2023</th><td>$3.52</td><td>$4.21</td></tr>
+<tr><th scope="row">2022</th><td>$3.95</td><td>$4.99</td></tr>
+<tr><th scope="row">2021</th><td>$3.01</td><td>$3.29</td></tr>
+<tr><th scope="row">2020</th><td>$2.17</td><td>$2.55</td></tr>
+<tr><th scope="row">2019</th><td>$2.60</td><td>$3.06</td></tr>
+<tr><th scope="row">2018</th><td>$2.72</td><td>$3.18</td></tr>
+<tr><th scope="row">2017</th><td>$2.41</td><td>$2.65</td></tr>
+</tbody></table>
+<!-- FUELYEARS:END -->
+
+        <h2>About the historical chart</h2>
+        <p>Tick "See historical data" to see how far the money for your trip would have taken you in each week of the past 10 years, in the same car. It uses the weekly US average price from the U.S. Energy Information Administration: when gas was cheaper, the same money bought more fuel and went further. If you use another currency or your own price, the chart applies the same changes in the US average price to your trip, so treat it as a guide to the trend rather than an exact figure for your country.</p>
+
+        <h2>Questions</h2>
+<!-- FUELFAQ:START -->
+<h3>What is the average gas price in the US today?</h3>
+<p>In the week of 19 October 2026, regular gasoline averaged <strong>$4.28</strong> a gallon across the United States, according to the U.S. Energy Information Administration. Over the past 10 years, the weekly average has ranged from $1.77 (week of 27 April 2020) to $5.01 (week of 13 June 2022).</p>
+<h3>How much does it cost to drive 100 miles?</h3>
+<p>With a car that does 30 miles per gallon and gasoline at the US average of $4.28, 100 miles uses 3.33 gallons and costs about <strong>$14.28</strong>. In metric terms, a car using 7 litres per 100 km costs about $7.92 per 100 km at the same price. Enter your own car and price above for an exact figure.</p>
+<!-- FUELFAQ:END -->
+        <h3>How do I convert MPG to litres per 100 km?</h3>
+        <p>Divide 235.21 by the miles per gallon (US). For example, 30 MPG is 235.21 ÷ 30 = 7.8 litres per 100 km. For UK (imperial) gallons, divide 282.48 by the MPG instead. The calculator does this for you when you change the unit.</p>
+        <h3>Which currencies can I use?</h3>
+        <p>Any of the currencies in the list. Choose yours and type the price you pay at the pump, per litre or per gallon. The US average price is only filled in automatically for US dollars.</p>
+
+        <p class="small-print">Results are estimates: real fuel use depends on speed, traffic, load and weather. US prices: U.S. Energy Information Administration. See <a href="/about.html">how this site works</a>.</p>
+      </article>
+    </div>
+
+    <aside class="ad-slot ad-rail" aria-label="Advertisement">
+      <div class="ad-rail-inner">
+        <p class="ad-label">Advertisement</p>
+        <ins class="adsbygoogle" style="display:inline-block;width:300px;height:600px"
+             data-ad-client="ca-pub-9932307887793247"
+             data-ad-slot="AD_SLOT_SIDEBAR"></ins>
+      </div>
+    </aside>
+  </main>
+
+  <footer class="foot wrap">
+    <p>© <span id="year">2026</span> oilprices.io</p>
+    <p><a href="/">Oil prices</a></p>
+    <p><a href="/tools/">Tools</a></p>
+    <p><a href="/tools/strategic-petroleum-reserve.html">US oil reserves (SPR)</a></p>
+    <p><a href="/about.html">About and methodology</a></p>
+    <p><a href="/privacy.html">Privacy policy</a></p>
+    <p><a href="/terms.html">Terms of use</a></p>
+    <p><a href="#" data-consent-settings>Privacy and cookie settings</a></p>
+    <p><a href="/privacy.html#us-choices">Do Not Sell or Share My Personal Information</a></p>
+    <p><a href="mailto:hello@oilprices.io">hello@oilprices.io</a></p>
+    <p class="gpc-notice" data-gpc-notice hidden>Opt-out request honored (Global Privacy Control)</p>
+  </footer>
+
+  <script src="/tools/fuel.js" defer></script>
+  <script>
+    document.querySelectorAll("ins.adsbygoogle").forEach(function (ad) {
+      var slot = ad.closest(".ad-slot");
+      var hasId = /^\d+$/.test(ad.getAttribute("data-ad-slot"));
+      var visible = getComputedStyle(slot).display !== "none";
+      if (hasId && visible) (window.adsbygoogle = window.adsbygoogle || []).push({});
+      else if (!hasId) slot.hidden = true;
+    });
+  </script>
+  <script src="/consent.js" defer></script>
+  <script>document.getElementById("year").textContent = new Date().getFullYear();</script>
+</body>
+</html>
