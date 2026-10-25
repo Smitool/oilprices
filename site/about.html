@@ -1,0 +1,140 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>About oilprices.io: Who Runs It and Where the Oil Prices Come From</title>
+  <meta name="description" content="Who runs oilprices.io, where its Brent and WTI prices and US oil import data come from, how often they update, how errors are corrected and how AI is used.">
+  <link rel="canonical" href="https://oilprices.io/about.html">
+  <meta property="og:title" content="About oilprices.io">
+  <meta property="og:description" content="Who runs the site, where the oil prices come from and how often they update.">
+  <meta property="og:url" content="https://oilprices.io/about.html">
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="oilprices.io">
+  <meta property="og:image" content="https://oilprices.io/og-prices.png">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="theme-color" content="#0a1d24" media="(prefers-color-scheme: light)">
+  <meta name="theme-color" content="#071419" media="(prefers-color-scheme: dark)">
+  <link rel="icon" href="favicon.svg" type="image/svg+xml">
+  <link rel="apple-touch-icon" href="apple-touch-icon.png">
+  <link rel="preload" href="fonts/archivo.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="stylesheet" href="styles.css">
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "AboutPage",
+        "@id": "https://oilprices.io/about.html#page",
+        "url": "https://oilprices.io/about.html",
+        "name": "About oilprices.io",
+        "isPartOf": { "@id": "https://oilprices.io/#website" },
+        "about": { "@id": "https://oilprices.io/#org" },
+        "dateModified": "2026-10-25",
+        "inLanguage": "en"
+      },
+      {
+        "@type": "Organization",
+        "@id": "https://oilprices.io/#org",
+        "name": "oilprices.io",
+        "url": "https://oilprices.io/",
+        "logo": "https://oilprices.io/logo-512.png",
+        "email": "hello@oilprices.io",
+        "founder": { "@type": "Person", "@id": "https://oilprices.io/about.html#nicholas", "name": "Nicholas Ralph", "url": "https://oilprices.io/about.html" }
+      },
+      {
+        "@type": "BreadcrumbList",
+        "itemListElement": [
+          { "@type": "ListItem", "position": 1, "name": "Oil prices", "item": "https://oilprices.io/" },
+          { "@type": "ListItem", "position": 2, "name": "About", "item": "https://oilprices.io/about.html" }
+        ]
+      }
+    ]
+  }
+  </script>
+  <script src="privacy-signals.js"></script>
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9932307887793247" crossorigin="anonymous"></script>
+</head>
+<body>
+  <div class="band">
+    <header class="band-top wrap">
+      <a class="wordmark" href="/">oilprices<span>.io</span></a>
+      <nav class="site-nav" aria-label="Main">
+        <a href="/">Oil prices</a>
+        <a href="imports.html">US oil imports</a>
+        <a href="about.html" aria-current="page">About</a>
+      </nav>
+    </header>
+    <div class="about-head wrap">
+      <h1>About oilprices.io</h1>
+      <p>Who runs this site, where every number comes from, and how often it updates.</p>
+    </div>
+  </div>
+
+  <main class="wrap doc about-doc">
+    <p>oilprices.io shows the price of crude oil in plain numbers, with charts and data from public sources. It is free, needs no sign-up and is paid for by ads.</p>
+
+    <h2 id="who">Who runs this site</h2>
+    <p>oilprices.io is run by Nicholas Ralph, based in Bielsko-Biała, Poland.<!-- ADD HERE: one or two sentences about your background --></p>
+    <p>Nicholas writes or reviews every page before it goes live.</p>
+
+    <h2 id="sources">Where the numbers come from</h2>
+    <table class="sources-table">
+      <thead><tr><th scope="col">Data</th><th scope="col">Source</th><th scope="col">How often it updates</th></tr></thead>
+      <tbody>
+        <tr>
+          <th scope="row">Live Brent and WTI prices</th>
+          <td>OANDA's Brent (BCOUSD) and WTI (WTICOUSD) quotes, shown with <a href="https://www.tradingview.com/" rel="noopener nofollow">TradingView</a> widgets. They track the nearest-month futures closely but are not official ICE or NYMEX settlement prices.</td>
+          <td>Continuously while the market is open, Sunday evening to Friday evening.</td>
+        </tr>
+        <tr>
+          <th scope="row">Official spot prices</th>
+          <td><a href="https://www.eia.gov/dnav/pet/pet_pri_spt_s1_d.htm">U.S. Energy Information Administration</a> daily spot prices for Europe Brent and WTI at Cushing, Oklahoma. Original data: Refinitiv, an LSEG business.</td>
+          <td>EIA publishes them weekly, on Wednesdays. Our home page updates the next morning.</td>
+        </tr>
+        <tr>
+          <th scope="row">US crude oil imports</th>
+          <td><a href="https://www.eia.gov/petroleum/imports/companylevel/">EIA company-level imports</a> (Form EIA-814), by country of origin, grade and port of entry.</td>
+          <td>Monthly, about two months after each month ends. We check every Monday.</td>
+        </tr>
+        <tr>
+          <th scope="row">Map background</th>
+          <td><a href="https://openfreemap.org/">OpenFreeMap</a>, using OpenStreetMap data.</td>
+          <td>As provided.</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <h2 id="live-vs-official">Why the live price and the official price differ</h2>
+    <p>The live prices follow futures contracts for oil delivered in the coming weeks. The EIA figures are spot prices for physical crude delivered now, recorded once a day. In calm markets the two are usually close, but when supply is tight, physical cargoes can trade well above futures. Both are shown on the <a href="/#official-prices">home page</a>.</p>
+
+    <h2 id="ai">How we use AI</h2>
+    <p>The site's code and first drafts of some explanations were written with help from an AI assistant (Claude, made by Anthropic). Nicholas reviews and edits everything before it is published. Prices and import figures come straight from the sources above. They are never written, estimated or changed by AI.</p>
+
+    <h2 id="corrections">Corrections</h2>
+    <p>If you spot an error, email <a href="mailto:hello@oilprices.io">hello@oilprices.io</a>. We check every report, fix confirmed errors as soon as we can, and note significant corrections on the page where they happened.</p>
+
+    <h2 id="independence">Independence and advertising</h2>
+    <p>The site is funded by ads served by Google AdSense. No data provider, broker or advertiser pays to influence what we publish. Nothing on this site is investment advice.</p>
+
+    <h2 id="contact">Contact</h2>
+    <p>Email: <a href="mailto:hello@oilprices.io">hello@oilprices.io</a><br>Post: Nicholas Ralph, ul. Kolista 85, 43-300 Bielsko-Biała, Poland</p>
+    <p>See also our <a href="privacy.html">privacy policy</a> and <a href="terms.html">terms of use</a>.</p>
+  </main>
+
+  <footer class="foot wrap">
+    <p>© <span id="year">2026</span> oilprices.io</p>
+    <p><a href="/">Oil prices</a></p>
+    <p><a href="imports.html">US oil imports</a></p>
+    <p><a href="privacy.html">Privacy policy</a></p>
+    <p><a href="terms.html">Terms of use</a></p>
+    <p><a href="#" data-consent-settings>Privacy and cookie settings</a></p>
+    <p><a href="privacy.html#us-choices">Do Not Sell or Share My Personal Information</a></p>
+    <p><a href="mailto:hello@oilprices.io">hello@oilprices.io</a></p>
+    <p class="gpc-notice" data-gpc-notice hidden>Opt-out request honored (Global Privacy Control)</p>
+  </footer>
+
+  <script src="consent.js" defer></script>
+  <script>document.getElementById("year").textContent = new Date().getFullYear();</script>
+</body>
+</html>

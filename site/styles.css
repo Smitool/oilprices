@@ -277,3 +277,43 @@ button.bar-row:hover .bar-name { text-decoration: underline; }
   .quote + .quote { padding-left: 0; border-left: 0; border-top: 1px solid rgba(255, 255, 255, 0.12); padding-top: 0.5rem; }
   .tv-slot-chart { height: 420px; }
 }
+
+/* Official EIA spot prices (home page) */
+:root { --up: #17774a; --down: #b4232c; }
+@media (prefers-color-scheme: dark) { :root { --up: #4cc38a; --down: #ff7b72; } }
+.official { margin-top: 2.25rem; padding-top: 0.25rem; }
+.official h2 { margin-top: 0; }
+.article .official-updated-line { margin: 0; font-size: 0.8125rem; color: var(--ink-3); }
+.article .official-lead { margin-top: 0.75rem; }
+.official-stats { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 0.75rem 1.25rem; margin: 1.25rem 0 0; }
+.official-stats div { border-top: 2px solid var(--ink); padding-top: 0.45rem; }
+.official-stats dt { font-size: 0.75rem; color: var(--ink-3); }
+.official-stats dd { margin: 0; }
+.official-price { margin-top: 0.1rem !important; font-size: 1.5rem; font-weight: 750; font-stretch: 110%; color: var(--ink); }
+.official-chg { margin-top: 0.15rem !important; font-size: 0.8125rem; color: var(--ink-3); }
+.official-chg.up { color: var(--up); }
+.official-chg.down { color: var(--down); }
+.official-tables { display: grid; gap: 0 2rem; margin-top: 0.5rem; }
+.official-tables .summary-table { margin-top: 1.25rem; }
+.official-tables td { white-space: nowrap; }
+.article .official-note { margin-top: 1rem; font-size: 0.8125rem; color: var(--ink-3); }
+@media (min-width: 760px) { .official-tables { grid-template-columns: minmax(0, 1.35fr) minmax(0, 1fr); align-items: start; } }
+@media (max-width: 520px) { .official-price { font-size: 1.25rem; } .official-stats { gap: 0.75rem 0.9rem; } }
+
+/* About page */
+.about-head { padding-block: 0.75rem 1.75rem; }
+.about-head h1 { margin: 0; color: #fff; font-size: clamp(1.5rem, 3.2vw, 2.25rem); font-weight: 750; font-stretch: 115%; letter-spacing: -0.015em; line-height: 1.1; }
+.about-head p { margin: 0.5rem 0 0; max-width: 40rem; color: rgba(255, 255, 255, 0.72); font-size: 0.9375rem; }
+.about-doc { padding-top: 0.5rem; }
+.sources-table { width: 100%; max-width: 46rem !important; border-collapse: collapse; font-size: 0.875rem; margin-top: 0.75rem; }
+.sources-table th, .sources-table td { text-align: left; vertical-align: top; padding: 0.6rem 1rem 0.6rem 0; border-bottom: 1px solid var(--rule); color: var(--ink-2); }
+.sources-table thead th { font-size: 0.75rem; font-weight: 600; color: var(--ink-3); }
+.sources-table tbody th { color: var(--ink); font-weight: 600; width: 22%; }
+@media (max-width: 600px) {
+  .sources-table thead { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); }
+  .sources-table, .sources-table tbody, .sources-table tr, .sources-table th, .sources-table td { display: block; width: auto !important; }
+  .sources-table tr { padding: 0.65rem 0; border-bottom: 1px solid var(--rule); }
+  .sources-table th, .sources-table td { padding: 0.15rem 0; border: 0; }
+  .sources-table td:last-child { color: var(--ink-3); }
+  .sources-table td:last-child::before { content: "Updates: "; font-weight: 600; }
+}
