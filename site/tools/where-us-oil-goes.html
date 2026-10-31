@@ -1,0 +1,204 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Where Does US Oil Go? Interactive Flow Chart of US Oil Supply and Use | oilprices.io</title>
+  <meta name="description" content="Where US oil comes from and where it goes: production, imports, exports and what it becomes, from gasoline and diesel to jet fuel and plastics. Interactive flow chart with official EIA data.">
+  <link rel="canonical" href="https://oilprices.io/tools/where-us-oil-goes.html">
+  <meta property="og:title" content="Where US oil goes: an interactive flow chart">
+  <meta property="og:description" content="US oil production, imports, exports and uses in one chart, from official EIA data.">
+  <meta property="og:url" content="https://oilprices.io/tools/where-us-oil-goes.html">
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="oilprices.io">
+  <meta property="og:image" content="https://oilprices.io/og-prices.png">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="theme-color" content="#0a1d24" media="(prefers-color-scheme: light)">
+  <meta name="theme-color" content="#071419" media="(prefers-color-scheme: dark)">
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+  <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+  <link rel="preload" href="/fonts/archivo.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="preload" href="/data/flows.json" as="fetch" crossorigin>
+  <link rel="stylesheet" href="/styles.css">
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "WebPage",
+        "@id": "https://oilprices.io/tools/where-us-oil-goes.html#page",
+        "url": "https://oilprices.io/tools/where-us-oil-goes.html",
+        "name": "Where US oil goes: interactive flow chart",
+        "isPartOf": { "@type": "WebSite", "name": "oilprices.io", "url": "https://oilprices.io/" },
+        "dateModified": "2026-10-29",
+        "inLanguage": "en"
+      },
+      {
+        "@type": "Dataset",
+        "name": "US supply and disposition of crude oil and petroleum products, annual",
+        "description": "Annual US field production, imports, exports, refinery gain and product supplied of crude oil and petroleum products, in million barrels a day, from the U.S. Energy Information Administration.",
+        "url": "https://oilprices.io/tools/where-us-oil-goes.html",
+        "isBasedOn": "https://www.eia.gov/dnav/pet/pet_sum_snd_d_nus_mbblpd_a_cur.htm",
+        "creator": { "@type": "Organization", "name": "U.S. Energy Information Administration", "url": "https://www.eia.gov" },
+        "publisher": { "@type": "Organization", "name": "oilprices.io", "url": "https://oilprices.io/" },
+        "license": "https://creativecommons.org/publicdomain/mark/1.0/",
+        "isAccessibleForFree": true,
+        "spatialCoverage": "United States",
+        "distribution": { "@type": "DataDownload", "encodingFormat": "application/json", "contentUrl": "https://oilprices.io/data/flows.json" }
+      },
+      {
+        "@type": "BreadcrumbList",
+        "itemListElement": [
+          { "@type": "ListItem", "position": 1, "name": "Oil prices", "item": "https://oilprices.io/" },
+          { "@type": "ListItem", "position": 2, "name": "Tools", "item": "https://oilprices.io/tools/" },
+          { "@type": "ListItem", "position": 3, "name": "Where US oil goes", "item": "https://oilprices.io/tools/where-us-oil-goes.html" }
+        ]
+      }
+    ]
+  }
+  </script>
+  <script src="/privacy-signals.js"></script>
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9932307887793247" crossorigin="anonymous"></script>
+</head>
+<body>
+  <div class="band">
+    <header class="band-top wrap">
+      <a class="wordmark" href="/">oilprices<span>.io</span></a>
+      <nav class="site-nav" aria-label="Main">
+        <a href="/">Oil prices</a>
+        <a href="/imports.html">US oil imports</a>
+        <a href="/tools/" aria-current="page">Tools</a>
+        <a href="/about.html">About</a>
+      </nav>
+    </header>
+    <div class="tool-head wrap">
+      <p class="crumbs-band"><a href="/tools/">Tools</a></p>
+      <h1>Where US oil goes</h1>
+      <p>Every barrel of crude oil, gas liquids and fuel the United States produces and imports, and where it ends up: exported, or used at home for driving, freight, flying, roads and plastics.</p>
+    </div>
+  </div>
+
+  <main class="wrap">
+    <section class="of" aria-label="US oil flow chart">
+      <div class="of-top">
+        <dl class="of-kpis">
+          <div><dt>Produced</dt><dd id="of-produced">21.2 <small>mb/d</small></dd></div>
+          <div><dt>Imported</dt><dd id="of-imported">7.9 <small>mb/d</small></dd></div>
+          <div><dt>Used in the US</dt><dd id="of-used">20.7 <small>mb/d</small></dd></div>
+          <div><dt>Exported</dt><dd id="of-exported">10.8 <small>mb/d</small></dd></div>
+        </dl>
+        <div class="of-year" id="of-year-wrap" hidden>
+          <span class="fc-label">Year</span>
+          <div class="seg" id="of-years" role="group" aria-label="Year"></div>
+        </div>
+      </div>
+
+      <div class="of-mix" id="of-mix" hidden>
+        <div class="of-mix-bar" aria-hidden="true"><span class="of-mix-pet" id="of-mix-pet"></span><span class="of-mix-gas" id="of-mix-gas"></span><span class="of-mix-oth" id="of-mix-oth"></span></div>
+        <p id="of-mix-text"></p>
+      </div>
+
+      <div class="of-scroll" id="of-scroll">
+        <svg class="of-chart" id="of-chart" viewBox="0 0 1340 650" role="img" aria-labelledby="of-chart-title of-chart-desc">
+          <title id="of-chart-title">Flow chart of US oil supply, exports and uses</title>
+          <desc id="of-chart-desc">US crude oil, natural gas liquids and biofuels flow in from the left, and imports and refinery gain rise from below into total supply. Crude, gas liquid and fuel exports leave the top. What stays in the US splits into transport fuels and materials, then into gasoline, diesel, jet fuel, asphalt and other products, and gas liquids.</desc>
+        </svg>
+        <div class="map-tip" id="of-tip" hidden></div>
+      </div>
+      <p class="of-hint">Scroll sideways to see the whole chart. Tap a flow for details.</p>
+      <p class="of-note">mb/d = million barrels a day (1 barrel = 42 US gallons). Annual averages for <span id="of-year-note"><!-- FLOWYEAR -->2025<!-- /FLOWYEAR --></span>. Small stock changes and adjustments are not shown. Uses describe each product's main use. Source: U.S. Energy Information Administration.</p>
+      <p class="of-note" id="of-error" hidden>The chart could not load. Please refresh the page.</p>
+    </section>
+
+    <div class="layout">
+      <div class="content">
+        <aside class="ad-slot ad-inline" aria-label="Advertisement">
+          <p class="ad-label">Advertisement</p>
+          <ins class="adsbygoogle" style="display:block"
+               data-ad-client="ca-pub-9932307887793247"
+               data-ad-slot="AD_SLOT_INLINE"
+               data-ad-format="auto"
+               data-full-width-responsive="true"></ins>
+        </aside>
+
+        <article class="article">
+          <h2>Where US oil went last year</h2>
+<!-- FLOWNOW:START -->
+<p>In 2025, the United States produced <strong>21.2 million barrels a day</strong> of crude oil and natural gas liquids and imported 7.9 million barrels a day. It used <strong>20.7 million barrels a day</strong> at home and exported 10.8 million, 2.8 million barrels a day more than it imported.</p>
+<p>Gasoline was the largest single use, at 8.9 million barrels a day, 43% of all the oil the country used. Diesel and heating oil came next at 3.9 million, then propane, ethane and butane at 3.9 million. Of the 13.7 million barrels a day of crude pumped from US wells, 4.0 million was exported and the rest, about 9.7 million, went to refineries.</p>
+<!-- FLOWNOW:END -->
+
+          <h2>How to read the chart</h2>
+          <p>The width of every flow is proportional to its volume. US supply flows in from the left: crude oil from US wells, natural gas liquids from gas processing plants and biofuels such as ethanol. Imports rise from below, together with <strong>refinery gain</strong>, the extra volume that appears because refined products are less dense than the crude they are made from. Everything meets in the middle, in the total supply.</p>
+          <p>Exports leave the total supply and curve up. What stays in the US splits first into transport fuels and materials, then into five groups of products, each shown with its main use. The figures are annual averages from the U.S. Energy Information Administration. What the chart calls "used in the US" is what the EIA calls <strong>product supplied</strong>, its standard measure of US oil consumption.</p>
+
+          <h2>Why the US exports and imports oil at the same time</h2>
+          <p>Most of the growth in US production since the shale boom has been light, low-sulfur crude from fields such as the Permian Basin in Texas and New Mexico. Many US refineries, especially on the Gulf Coast and in the Midwest, were built to run heavier, higher-sulfur crude, the kind that comes from Canada and Latin America. It is usually cheaper to sell some light crude abroad and keep buying heavier grades than to rebuild refineries.</p>
+          <p>Geography matters too. Refineries on the East and West Coasts are far from the main US oil fields and pipelines, so they often buy crude by sea. See where it comes from on the <a href="/imports.html">map of US crude oil imports</a>.</p>
+
+          <h2>What the products are used for</h2>
+          <p><strong>Gasoline</strong> powers cars, SUVs, pickups, motorbikes and small boats; about a tenth of it is ethanol blended in. <strong>Diesel</strong> moves trucks, trains, ships and farm machinery, and the same fuel heats some homes as heating oil. <strong>Jet fuel</strong> is used by passenger and cargo planes. <strong>Propane, ethane and butane</strong> are mostly made into plastics and chemicals, and propane also heats homes and fuels grills. The rest includes asphalt for roads, petroleum coke for industry, lubricants and the gas refineries burn for their own energy.</p>
+
+          <h2>US oil supply and use by year</h2>
+<!-- FLOWTABLE:START -->
+<table class="summary-table"><caption>US crude oil and petroleum products, million barrels a day</caption><thead><tr><th scope="col">Year</th><th scope="col">Produced</th><th scope="col">Imported</th><th scope="col">Used</th><th scope="col">Exported</th><th scope="col">Net exports</th></tr></thead><tbody>
+<tr><th scope="row">2025</th><td>21.2</td><td>7.9</td><td>20.7</td><td>10.8</td><td>+2.8</td></tr>
+</tbody></table>
+<!-- FLOWTABLE:END -->
+
+          <h2>Questions</h2>
+<!-- FLOWFAQ:START -->
+<h3>How much oil does the US use a day?</h3>
+<p>20.7 million barrels a day in 2025, or about 871 million gallons a day, according to the U.S. Energy Information Administration. That counts all petroleum products, from gasoline and diesel to propane and asphalt.</p>
+<h3>Does the US export more oil than it imports?</h3>
+<p>Yes. In 2025 the US exported 10.8 million barrels a day of crude oil and petroleum products and imported 7.9 million, making it a net exporter of 2.8 million barrels a day.</p>
+<h3>What is most US oil used for?</h3>
+<p>Driving. Gasoline for cars, SUVs and pickups took 8.9 million barrels a day in 2025, 43% of all US oil use. Diesel for trucks, trains, ships and farms took 3.9 million, and jet fuel 1.7 million.</p>
+<!-- FLOWFAQ:END -->
+          <h3>How much oil is in the US emergency reserve?</h3>
+          <p>See this week's level, and how long it would last, on the <a href="/tools/strategic-petroleum-reserve.html">Strategic Petroleum Reserve tracker</a>.</p>
+
+          <p class="small-print">Sources: <a href="https://www.eia.gov/dnav/pet/pet_sum_snd_d_nus_mbblpd_a_cur.htm">EIA supply and disposition of crude oil and petroleum products</a> and the <a href="https://www.eia.gov/totalenergy/data/monthly/">EIA Monthly Energy Review</a> for the share of petroleum in US energy use. EIA publishes full-year figures once a year; this page checks for new data several times a week. See <a href="/about.html">how this site works</a>.</p>
+        </article>
+      </div>
+
+      <aside class="ad-slot ad-rail" aria-label="Advertisement">
+        <div class="ad-rail-inner">
+          <p class="ad-label">Advertisement</p>
+          <ins class="adsbygoogle" style="display:inline-block;width:300px;height:600px"
+               data-ad-client="ca-pub-9932307887793247"
+               data-ad-slot="AD_SLOT_SIDEBAR"></ins>
+        </div>
+      </aside>
+    </div>
+  </main>
+
+  <footer class="foot wrap">
+    <p>© <span id="year">2026</span> oilprices.io</p>
+    <p><a href="/">Oil prices</a></p>
+    <p><a href="/tools/">Tools</a></p>
+    <p><a href="/tools/fuel-cost-calculator.html">Fuel cost calculator</a></p>
+    <p><a href="/tools/strategic-petroleum-reserve.html">US oil reserves (SPR)</a></p>
+    <p><a href="/about.html">About and methodology</a></p>
+    <p><a href="/privacy.html">Privacy policy</a></p>
+    <p><a href="/terms.html">Terms of use</a></p>
+    <p><a href="#" data-consent-settings>Privacy and cookie settings</a></p>
+    <p><a href="/privacy.html#us-choices">Do Not Sell or Share My Personal Information</a></p>
+    <p><a href="mailto:hello@oilprices.io">hello@oilprices.io</a></p>
+    <p class="gpc-notice" data-gpc-notice hidden>Opt-out request honored (Global Privacy Control)</p>
+  </footer>
+
+  <script src="/tools/flows.js" defer></script>
+  <script>
+    document.querySelectorAll("ins.adsbygoogle").forEach(function (ad) {
+      var slot = ad.closest(".ad-slot");
+      var hasId = /^\d+$/.test(ad.getAttribute("data-ad-slot"));
+      var visible = getComputedStyle(slot).display !== "none";
+      if (hasId && visible) (window.adsbygoogle = window.adsbygoogle || []).push({});
+      else if (!hasId) slot.hidden = true;
+    });
+  </script>
+  <script src="/consent.js" defer></script>
+  <script>document.getElementById("year").textContent = new Date().getFullYear();</script>
+</body>
+</html>

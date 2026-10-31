@@ -456,3 +456,53 @@ button.bar-row:hover .bar-name { text-decoration: underline; }
 .spr-barrel-wrap .spr-play input[type="range"] { flex: none; width: 100%; }
 .spr-barrel-wrap .spr-time-out { min-width: 0; text-align: center; }
 @media (max-width: 859px) { .spr-barrel { max-width: 270px; } }
+
+/* Where US oil goes (flow chart) */
+.of { margin-top: 2rem; }
+.of-top { display: flex; flex-wrap: wrap; align-items: flex-end; justify-content: space-between; gap: 1rem 2rem; }
+.of-kpis { display: grid; grid-template-columns: repeat(4, minmax(7.5rem, 1fr)); gap: 0.75rem 1.25rem; margin: 0; flex: 1 1 34rem; max-width: 46rem; }
+.of-kpis div { border-top: 2px solid var(--ink); padding-top: 0.4rem; }
+.of-kpis dt { font-size: 0.75rem; color: var(--ink-3); }
+.of-kpis dd { margin: 0.1rem 0 0; font-size: 1.5rem; font-weight: 750; font-stretch: 110%; color: var(--ink); }
+.of-kpis dd small { font-size: 0.75rem; font-weight: 500; color: var(--ink-3); font-stretch: 100%; }
+.of-year { display: grid; gap: 0.35rem; justify-items: end; }
+.of-year .fc-label { margin: 0; }
+.of-mix { margin: 1.25rem 0 0; max-width: 46rem; }
+.of-mix-bar { display: flex; height: 8px; border-radius: 4px; overflow: hidden; background: var(--rule); }
+.of-mix-bar span { display: block; height: 100%; transition: width 0.6s ease; }
+.of-mix-bar span + span { border-left: 2px solid var(--bg); }
+.of-mix-pet { background: var(--ink); }
+.of-mix-gas { background: var(--ink-3); }
+.of-mix-oth { background: var(--rule); }
+.of-mix p { margin: 0.4rem 0 0; font-size: 0.8125rem; color: var(--ink-3); }
+.of-mix p strong { color: var(--ink); font-weight: 650; }
+.of-scroll { position: relative; margin-top: 1.5rem; overflow-x: auto; -webkit-overflow-scrolling: touch; }
+.of-chart { display: block; width: 100%; min-width: 940px; height: auto; font-family: inherit; }
+.of-main { fill: var(--ink); }
+.of-fade { fill: var(--rule); }
+.of-part { stroke: var(--bg); stroke-width: 1.5; stroke-linejoin: round; }
+.of-node { fill: var(--ink); }
+.of-node-off { fill: var(--rule); }
+.of-seam { fill: none; stroke: var(--bg); stroke-width: 1.2; }
+.of-k { font-size: 11px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; fill: var(--ink); }
+.of-k.out { fill: var(--accent); }
+.of-v { font-size: 11.5px; fill: var(--ink-3); }
+.of-trunk-k { font-size: 12.5px; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; fill: var(--bg); }
+.of-trunk-v { font-size: 12px; fill: var(--bg); opacity: 0.75; }
+.of-n { fill: var(--ink); }
+.of-icon { fill: none; stroke: var(--bg); stroke-width: 1.7; stroke-linecap: round; stroke-linejoin: round; }
+.of-grp-k { font-size: 10.5px; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; fill: var(--bg); }
+.of-grp-v { font-size: 11px; fill: var(--bg); opacity: 0.75; }
+.of-p { font-size: 10px; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; fill: var(--ink-3); }
+.of-t { font-size: 15px; font-weight: 700; fill: var(--ink); }
+.of-tv { font-size: 15px; fill: var(--ink-3); }
+.of-d { font-size: 11.5px; fill: var(--ink-2); }
+.of-lab { transition: opacity 0.2s; }
+.of-dim .of-lab { opacity: 0.25; }
+.of-dim .of-lab.on { opacity: 1; }
+.of-part { cursor: default; }
+.of-note { margin: 0.6rem 0 0; font-size: 0.75rem; color: var(--ink-3); }
+.of-hint { margin: 0.4rem 0 0; font-size: 0.8125rem; color: var(--ink-3); }
+@media (min-width: 900px) { .of-hint { display: none; } }
+@media (max-width: 720px) { .of-kpis { grid-template-columns: 1fr 1fr; } .of-kpis dd { font-size: 1.25rem; } .of-year { justify-items: start; } }
+.of-year[hidden] { display: none; }
