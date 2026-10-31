@@ -24,6 +24,7 @@ import os
 import re
 import sys
 import time
+import urllib.error
 import urllib.parse
 import urllib.request
 from datetime import datetime, timezone
@@ -36,7 +37,7 @@ SITEMAP = ROOT / "site" / "sitemap.xml"
 PAGE_URL = "https://oilprices.io/tools/where-us-oil-goes.html"
 API_SND = "https://api.eia.gov/v2/petroleum/sum/snd/data/"
 API_MER = "https://api.eia.gov/v2/total-energy/data/"
-PRODUCTS = ["EP00", "EPC0", "EPL0", "EPM0F", "EPD0", "EPJK"]
+PRODUCTS = ["EP00", "EPC0", "EPL0", "EPM0F", "EPD0", "EPJK", "EPOOR"]
 PROCESSES = ["FPF", "IM0", "EEX", "VPP", "YPR", "YIR", "YNP"]
 MSN = ["TETCBUS", "PMTCBUS", "NNTCBUS"]
 YEARS_BACK = 12
@@ -48,6 +49,12 @@ def get(url, attempts=4):
         try:
             with urllib.request.urlopen(url, timeout=60) as r:
                 return json.loads(r.read().decode("utf-8"))
+        except urllib.error.HTTPError as e:
+            body = e.read().decode("utf-8", "replace")[:300]
+            last = f"HTTP {e.code}: {body}"
+            if 400 <= e.code < 500 and e.code != 429:
+                break
+            time.sleep(5 * (i + 1))
         except Exception as e:
             last = e
             time.sleep(5 * (i + 1))
@@ -69,8 +76,16 @@ def fetch_all(api, params):
 def fetch(key, start):
     base = [("api_key", key), ("frequency", "annual"), ("data[0]", "value"), ("start", str(start)),
             ("sort[0][column]", "period"), ("sort[0][direction]", "desc")]
-    snd = fetch_all(API_SND, base + [("facets[duoarea][]", "NUS")]
-                    + [("facets[product][]", p) for p in PRODUCTS] + [("facets[process][]", p) for p in PROCESSES])
+    snd = []
+    for prod in PRODUCTS:
+        try:
+            rows = fetch_all(API_SND, base + [("facets[duoarea][]", "NUS"), ("facets[product][]", prod)])
+        except Exception as e:
+            print(f"::warning::EIA data for {prod} not loaded: {e}")
+            continue
+        rows = [r for r in rows if r.get("process") in PROCESSES]
+        print(f"{prod}: {len(rows)} rows")
+        snd.extend(rows)
     try:
         mer = fetch_all(API_MER, base + [("facets[msn][]", m) for m in MSN])
     except Exception as e:
@@ -83,7 +98,7 @@ def table(rows):
     """{(product, process, year): thousand barrels a day}, keeping only the per-day rows."""
     out = {}
     for r in rows:
-        if str(r.get("units", "")).upper() != "MBBL/D":
+        if str(r.get("units", "")).upper().replace(" ", "") not in ("MBBL/D", "MBBLD"):
             continue
         try:
             v = float(r.get("value"))
@@ -113,22 +128,26 @@ def mix_table(rows):
     return res
 
 
-REQUIRED = [("EP00", "FPF"), ("EPC0", "FPF"), ("EPL0", "FPF"), ("EPC0", "IM0"), ("EP00", "IM0"), ("EP00", "YNP"),
-            ("EP00", "YPR"), ("EP00", "YIR"), ("EPC0", "EEX"), ("EPL0", "EEX"), ("EP00", "EEX"), ("EP00", "VPP"),
+REQUIRED = [("EP00", "FPF"), ("EPC0", "FPF"), ("EPL0", "FPF"), ("EPC0", "IM0"), ("EP00", "IM0"),
+            ("EPC0", "EEX"), ("EPL0", "EEX"), ("EP00", "EEX"), ("EP00", "VPP"),
             ("EPM0F", "VPP"), ("EPD0", "VPP"), ("EPJK", "VPP"), ("EPL0", "VPP")]
 
 
 def build_year(t, y):
-    if any((p, q, y) not in t for p, q in REQUIRED):
+    missing = [f"{p}/{q}" for p, q in REQUIRED if (p, q, y) not in t]
+    if missing:
+        print(f"{y}: skipped, missing {', '.join(missing)}")
         return None
-    g = lambda p, q: t[(p, q, y)] / 1000
+    g = lambda p, q: t.get((p, q, y), 0) / 1000
+    bio = g("EP00", "YNP") or g("EPOOR", "YNP")
+    gain = g("EP00", "YPR") - g("EP00", "YIR") if (("EP00", "YPR", y) in t and ("EP00", "YIR", y) in t) else 0
     r = lambda v: round(max(0.0, v), 3)
     use = {"gas": g("EPM0F", "VPP"), "dsl": g("EPD0", "VPP"), "jet": g("EPJK", "VPP"), "hgl": g("EPL0", "VPP")}
     use["other"] = g("EP00", "VPP") - sum(use.values())
     return {
         "in": {"crude": r(g("EPC0", "FPF")), "ngl": r(g("EPL0", "FPF")), "impcrude": r(g("EPC0", "IM0")),
-               "impfuel": r(g("EP00", "IM0") - g("EPC0", "IM0")), "bio": r(g("EP00", "YNP")),
-               "gain": r(g("EP00", "YPR") - g("EP00", "YIR"))},
+               "impfuel": r(g("EP00", "IM0") - g("EPC0", "IM0")), "bio": r(bio),
+               "gain": r(gain)},
         "out": {"xcrude": r(g("EPC0", "EEX")), "xhgl": r(g("EPL0", "EEX")),
                 "xfuel": r(g("EP00", "EEX") - g("EPC0", "EEX") - g("EPL0", "EEX"))},
         "use": {k: r(v) for k, v in use.items()},
@@ -221,6 +240,7 @@ def main():
             set_output(False)
             return 0
         t = table(snd)
+        print(f"{len(snd)} rows from EIA, {len(t)} usable values")
     except Exception as e:
         print(f"Flows update failed, keeping the previous data: {e}", file=sys.stderr)
         set_output(False)
