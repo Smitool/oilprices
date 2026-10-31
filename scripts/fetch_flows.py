@@ -79,12 +79,15 @@ def fetch(key, start):
     snd = []
     for prod in PRODUCTS:
         try:
-            rows = fetch_all(API_SND, base + [("facets[duoarea][]", "NUS"), ("facets[product][]", prod)])
+            # US totals are area "NUS"; US imports and exports are filed under "NUS-Z00" (US to/from the world),
+            # so no area filter here; the rows are filtered in table()
+            rows = fetch_all(API_SND, base + [("facets[product][]", prod)] + [("facets[process][]", p) for p in PROCESSES])
         except Exception as e:
             print(f"::warning::EIA data for {prod} not loaded: {e}")
             continue
         rows = [r for r in rows if r.get("process") in PROCESSES]
-        print(f"{prod}: {len(rows)} rows")
+        trade = sorted({str(r.get("duoarea")) for r in rows if r.get("process") in ("IM0", "EEX")})
+        print(f"{prod}: {len(rows)} rows; import/export areas: {', '.join(trade[:6]) or 'none'}")
         snd.extend(rows)
     try:
         mer = fetch_all(API_MER, base + [("facets[msn][]", m) for m in MSN])
@@ -99,6 +102,9 @@ def table(rows):
     out = {}
     for r in rows:
         if str(r.get("units", "")).upper().replace(" ", "") not in ("MBBL/D", "MBBLD"):
+            continue
+        area = str(r.get("duoarea", "NUS")).upper()
+        if area != "NUS" and not area.startswith("NUS-Z"):
             continue
         try:
             v = float(r.get("value"))
