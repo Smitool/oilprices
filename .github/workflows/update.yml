@@ -53,8 +53,14 @@ jobs:
           EIA_API_KEY: ${{ secrets.EIA_API_KEY }}
         run: python scripts/fetch_spr.py
 
+      - name: Update US oil flows (supply, exports and uses) from EIA
+        id: flows
+        env:
+          EIA_API_KEY: ${{ secrets.EIA_API_KEY }}
+        run: python scripts/fetch_flows.py
+
       - name: Save new data to the repo
-        if: steps.imports.outputs.changed == 'true' || steps.prices.outputs.changed == 'true' || steps.fuel.outputs.changed == 'true' || steps.spr.outputs.changed == 'true'
+        if: steps.imports.outputs.changed == 'true' || steps.prices.outputs.changed == 'true' || steps.fuel.outputs.changed == 'true' || steps.spr.outputs.changed == 'true' || steps.flows.outputs.changed == 'true'
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
