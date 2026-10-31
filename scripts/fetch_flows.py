@@ -166,18 +166,26 @@ def f1(v):
     return f"{v:,.1f}"
 
 
-def now_html(y, d):
+def pct(a, b):
+    return (a - b) / b * 100 if b else 0
+
+
+def now_html(y, d, prev=None):
     t, u = d["totals"], d["use"]
     net = t["exported"] - t["imported"]
     crude_ref = d["in"]["crude"] - d["out"]["xcrude"]
-    out = [f"<p>In {y}, the United States produced <strong>{f1(t['produced'])} million barrels a day</strong> of crude oil and natural gas liquids "
-           f"and imported {f1(t['imported'])} million barrels a day. It used <strong>{f1(t['used'])} million barrels a day</strong> at home "
-           f"and exported {f1(t['exported'])} million, "
-           + (f"{f1(net)} million barrels a day more than it imported." if net > 0 else f"{f1(-net)} million barrels a day less than it imported.")
-           + "</p>",
-           f"<p>Gasoline was the largest single use, at {f1(u['gas'])} million barrels a day, {u['gas'] / t['used'] * 100:.0f}% of all the oil the "
+    p1 = (f"<p>In {y}, the United States produced <strong>{f1(t['produced'])} million barrels per day</strong> (bpd) of crude oil and natural gas liquids, "
+          f"of which {f1(d['in']['crude'])} million was crude oil. It imported {f1(t['imported'])} million bpd, used <strong>{f1(t['used'])} million bpd</strong> "
+          f"at home and exported {f1(t['exported'])} million, "
+          + (f"{f1(net)} million bpd more than it imported." if net > 0 else f"{f1(-net)} million bpd less than it imported."))
+    if prev:
+        pt = prev[1]["totals"]
+        p1 += (f" Production was {'up' if t['produced'] >= pt['produced'] else 'down'} {abs(pct(t['produced'], pt['produced'])):.1f}% on {prev[0]} "
+               f"and US oil use {'up' if t['used'] >= pt['used'] else 'down'} {abs(pct(t['used'], pt['used'])):.1f}%.")
+    out = [p1 + "</p>",
+           f"<p>Gasoline was the largest single use, at {f1(u['gas'])} million barrels per day, {u['gas'] / t['used'] * 100:.0f}% of all the oil the "
            f"country used. Diesel and heating oil came next at {f1(u['dsl'])} million, then propane, ethane and butane at {f1(u['hgl'])} million. "
-           f"Of the {f1(d['in']['crude'])} million barrels a day of crude pumped from US wells, {f1(d['out']['xcrude'])} million was exported "
+           f"Of the {f1(d['in']['crude'])} million barrels per day of crude pumped from US wells, {f1(d['out']['xcrude'])} million was exported "
            f"and the rest, about {f1(crude_ref)} million, went to refineries.</p>"]
     return "\n".join(out)
 
@@ -196,18 +204,28 @@ def table_html(years):
 
 
 def faq_html(y, d):
-    t, u = d["totals"], d["use"]
+    t, u, i, o = d["totals"], d["use"], d["in"], d["out"]
     net = t["exported"] - t["imported"]
     return "\n".join([
-        "<h3>How much oil does the US use a day?</h3>",
-        f"<p>{f1(t['used'])} million barrels a day in {y}, or about {t['used'] * 42:,.0f} million gallons a day, according to the U.S. "
-        f"Energy Information Administration. That counts all petroleum products, from gasoline and diesel to propane and asphalt.</p>",
+        "<h3>How much oil does the US produce per day?</h3>",
+        f"<p>{f1(t['produced'])} million barrels per day in {y}: {f1(i['crude'])} million barrels of crude oil and {f1(i['ngl'])} million barrels "
+        f"of natural gas liquids, according to the U.S. Energy Information Administration.</p>",
+        "<h3>How much oil does the US use per day?</h3>",
+        f"<p>{f1(t['used'])} million barrels per day in {y}, or about {t['used'] * 42:,.0f} million gallons a day. That counts all petroleum "
+        f"products, from gasoline and diesel to propane and asphalt.</p>",
+        "<h3>How much oil does the US import?</h3>",
+        f"<p>{f1(t['imported'])} million barrels per day in {y}: {f1(i['impcrude'])} million barrels of crude oil and {f1(i['impfuel'])} million "
+        f"barrels of fuels and other products.</p>",
+        "<h3>How much oil does the US export?</h3>",
+        f"<p>{f1(t['exported'])} million barrels per day in {y}: {f1(o['xcrude'])} million barrels of crude oil, {f1(o['xhgl'])} million of gas "
+        f"liquids such as propane, and {f1(o['xfuel'])} million of fuels such as diesel and gasoline.</p>",
         "<h3>Does the US export more oil than it imports?</h3>",
-        (f"<p>Yes. In {y} the US exported {f1(t['exported'])} million barrels a day of crude oil and petroleum products and imported "
-         f"{f1(t['imported'])} million, making it a net exporter of {f1(net)} million barrels a day.</p>" if net > 0 else
-         f"<p>No. In {y} the US imported {f1(t['imported'])} million barrels a day and exported {f1(t['exported'])} million.</p>"),
+        (f"<p>Yes. In {y} the US exported {f1(t['exported'])} million barrels per day of crude oil and petroleum products and imported "
+         f"{f1(t['imported'])} million, making it a net exporter of {f1(net)} million barrels per day. It still imports crude oil, "
+         f"because many refineries are built for heavier grades than most US wells produce.</p>" if net > 0 else
+         f"<p>No. In {y} the US imported {f1(t['imported'])} million barrels per day and exported {f1(t['exported'])} million.</p>"),
         "<h3>What is most US oil used for?</h3>",
-        f"<p>Driving. Gasoline for cars, SUVs and pickups took {f1(u['gas'])} million barrels a day in {y}, "
+        f"<p>Driving. Gasoline for cars, SUVs and pickups took {f1(u['gas'])} million barrels per day in {y}, "
         f"{u['gas'] / t['used'] * 100:.0f}% of all US oil use. Diesel for trucks, trains, ships and farms took {f1(u['dsl'])} million, "
         f"and jet fuel {f1(u['jet'])} million.</p>",
     ])
@@ -288,8 +306,13 @@ def main():
     if PAGE.exists():
         page = PAGE.read_text(encoding="utf-8")
         d = years[latest]
-        for name, content in (("FLOWNOW", now_html(latest, d)), ("FLOWTABLE", table_html(years)), ("FLOWFAQ", faq_html(latest, d))):
+        ys = sorted(years)
+        prev = (ys[-2], years[ys[-2]]) if len(ys) > 1 else None
+        for name, content in (("FLOWNOW", now_html(latest, d, prev)), ("FLOWTABLE", table_html(years)), ("FLOWFAQ", faq_html(latest, d))):
             page = replace_block(page, name, content)
+        page = re.sub(r"(<title>[^<]*\()\d{4}(\))", rf"\g<1>{latest}\g<2>", page)
+        page = re.sub(r'(<meta name="description" content="[^"]*? in )\d{4}(,)', rf"\g<1>{latest}\g<2>", page)
+        page = re.sub(r'(<meta property="og:title" content="[^"]*? in )\d{4}(")', rf"\g<1>{latest}\g<2>", page)
         page = re.sub(r"<!-- FLOWYEAR -->\d{4}<!-- /FLOWYEAR -->", f"<!-- FLOWYEAR -->{latest}<!-- /FLOWYEAR -->", page)
         page = re.sub(r'"dateModified": "[^"]*"', f'"dateModified": "{today}"', page)
         PAGE.write_text(page, encoding="utf-8")
